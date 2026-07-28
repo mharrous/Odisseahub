@@ -5,7 +5,7 @@
 - Lint sin errores ni avisos.
 - TypeScript estricto sin errores.
 - 3 pruebas unitarias aprobadas.
-- 6 pruebas E2E de flujos prioritarios aprobadas en 1440 × 900 y 390 × 844.
+- 8 pruebas E2E de flujos prioritarios aprobadas en 1440 × 900 y 390 × 844.
 - Build de producción generado correctamente.
 
 ## Consola
@@ -44,4 +44,4 @@ Pendiente antes de producción: ejecutar un análisis completo con axe y revisi�
 
 `npm audit --omit=dev` sigue señalando dos avisos altos del paquete React Router 7.18.1 vinculados al modo RSC/Server Actions. ODISSEA HUB utiliza exclusivamente `BrowserRouter` como SPA estática y no expone RSC, SSR ni Action handlers, por lo que esas rutas vulnerables no forman parte de la superficie actual. Se debe actualizar el paquete cuando exista una versión estable que resuelva el aviso. El audit completo también señala cinco rutas de desarrollo en ESLint/`brace-expansion`; no se empaquetan en producción.
 
-Pendiente: aplicar la migración contra Supabase, ejecutar pruebas con JWT reales de cada rol y revisar las políticas con datos de producción anonimizados.
+La migración, el seed y las correcciones de Auth/Storage/Data API están aplicadas en el proyecto remoto. Una prueba anónima confirmó una convocatoria publicada visible y cero programas o proyectos privados visibles. Sigue pendiente automatizar el acceso autenticado con cuentas reales de cada rol.

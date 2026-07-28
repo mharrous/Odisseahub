@@ -6,7 +6,7 @@ Aplicación publicada: [https://odissea-hub.pages.dev](https://odissea-hub.pages
 
 ## Estado
 
-La versión 0.1 entrega una primera aplicación funcional y navegable con persistencia local de desarrollo y una base Supabase versionada. Consulta [PROGRESS.md](./PROGRESS.md) para ver el alcance exacto y las funciones pendientes.
+La versión 0.1 está publicada y conectada a Supabase en producción. Incluye autenticación real, roles por organización, recuperación de contraseña, RLS y almacenamiento privado. Sin variables Supabase conserva un modo demo local para desarrollo y pruebas.
 
 ## Requisitos
 
@@ -44,9 +44,9 @@ npx supabase start
 npx supabase db reset
 ```
 
-La migración crea el modelo multi-organización, funciones de autorización, índices y RLS. El seed aporta una organización, programa, convocatoria, cohorte, ocho proyectos, tres mentores, fases, módulos, indicadores, eventos y documentos ficticios.
+Las migraciones crean el modelo multi-organización, funciones de autorización, índices, RLS, perfiles de Auth, buckets privados y los privilegios mínimos de Data API. El seed aporta una organización, programa, convocatoria, cohorte, ocho proyectos, tres mentores, fases, módulos, indicadores, eventos y documentos ficticios.
 
-Los usuarios demo de la interfaz son perfiles locales y no representan cuentas de producción. En Supabase local, crea los usuarios mediante Auth o un script administrativo fuera del navegador.
+Los perfiles demo solo aparecen cuando Supabase no está configurado. En producción, cada usuario debe existir en Supabase Auth y tener una membresía activa con rol en `organization_members`.
 
 ## Calidad
 
@@ -72,7 +72,6 @@ Build: `npm run build`. Salida: `dist`. El repositorio incluye fallback SPA y ca
 
 ## Limitaciones actuales
 
-- Sin credenciales se usa persistencia local, no un backend remoto.
+- Los módulos visuales de primera fase todavía usan datos de demostración; la sesión, el rol y las políticas de acceso ya son reales.
 - Correo, PDF/XLSX avanzado, calendario completo, comunidad y Copiloto requieren siguientes iteraciones.
-- La migración debe probarse contra una instancia Supabase local/remota antes de producción.
 - Los textos legales son marcadores y requieren validación jurídica.

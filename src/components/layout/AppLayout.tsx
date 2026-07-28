@@ -70,8 +70,8 @@ export function AppLayout() {
   const navigate = useNavigate()
   const nav = role === 'participant' ? participantNav : role === 'mentor' ? mentorNav : role === 'evaluator' ? evaluatorNav : adminNav
 
-  const handleLogout = () => {
-    logout()
+  const handleLogout = async () => {
+    await logout()
     navigate('/login')
   }
 

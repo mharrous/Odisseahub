@@ -13,28 +13,33 @@
 - Vistas iniciales de participante, mentor y evaluador.
 - Migración inicial multi-organización con RLS y auditoría.
 - Seed de demostración no personal.
+- Proyecto Supabase de producción creado y migraciones/seed aplicados.
+- Autenticación real con sesión persistente, cierre de sesión, roles y recuperación de contraseña.
+- Administrador real invitado y membresía `organization_admin` activa.
+- Buckets privados y trigger automático de perfiles.
+- Data API pública limitada por RLS: solo convocatorias publicadas; programas y proyectos privados no se exponen.
+- URL de producción y redirecciones de Auth configuradas.
 
 ## En curso
 
-- Integración E2E con un proyecto Supabase real.
+- Sustitución progresiva de datos demo de los módulos por repositorios Supabase.
 - Ampliación de formularios configurables y constructor drag and drop.
 
 ## Pendiente
 
-- Flujos completos de correo, invitaciones y recuperación contra proveedor real.
+- Plantillas de correo institucionales y proveedor SMTP propio.
 - Editor enriquecido, calendario avanzado, comunidad y generación PDF/XLSX.
 - Edge Functions de informes, correo y enlaces firmados.
 - Realtime selectivo.
 - Copiloto ODISSEA (desactivado).
-- Aplicación completa de las migraciones y pruebas RLS en un Supabase remoto.
+- Pruebas E2E autenticadas con cuentas reales de cada rol.
 
 ## Bloqueos
 
-- No se han proporcionado URL ni claves públicas de un proyecto Supabase.
-- No hay proveedor de correo configurado.
+- No hay proveedor SMTP institucional configurado; se usa el servicio de correo incluido por Supabase.
 
 ## Decisiones adoptadas
 
-- Modo demo seguro con persistencia local para desarrollo sin credenciales.
+- Producción con Supabase; modo demo seguro solo para desarrollo y pruebas sin credenciales.
 - Ninguna función pendiente se representa como operativa.
 - Marca propia con motivos de navegación y nodos, sin recursos de terceros.

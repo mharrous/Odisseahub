@@ -3,6 +3,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { AppLayout } from './components/layout/AppLayout'
 import { AuthProvider } from './features/auth/AuthContext'
 import { LoginPage } from './features/auth/LoginPage'
+import { PasswordRecoveryPage } from './features/auth/PasswordRecoveryPage'
 import { AdminDashboard } from './features/dashboard/AdminDashboard'
 import { RoleDashboard } from './features/dashboard/RoleDashboard'
 import { ProgramsPage } from './features/programs/ProgramsPage'
@@ -36,7 +37,8 @@ export default function App() {
             <Route path="/convocatorias/:slug" element={<CallDetailPage />} />
             <Route path="/convocatorias/:slug/solicitud" element={<ApplicationPage />} />
             <Route path="/login" element={<LoginPage />} />
-            <Route path="/recuperar-contrasena" element={<StaticPage title="Recuperar contraseña" />} />
+            <Route path="/recuperar-contrasena" element={<PasswordRecoveryPage />} />
+            <Route path="/restablecer-contrasena" element={<PasswordRecoveryPage update />} />
             <Route path="/privacidad" element={<StaticPage title="Política de privacidad" />} />
             <Route path="/terminos" element={<StaticPage title="Términos de uso" />} />
             <Route path="/accesibilidad" element={<StaticPage title="Declaración de accesibilidad" />} />

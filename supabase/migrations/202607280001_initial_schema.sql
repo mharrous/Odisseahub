@@ -516,11 +516,11 @@ begin
 end $$;
 
 create policy "members read organization" on public.organizations for select
-  using (public.is_organization_member(id));
+  using (public.is_organization_member(organizations.id));
 create policy "members read own membership" on public.organization_members for select
   using (user_id = auth.uid() or public.has_permission(organization_id, 'users.manage'));
-create policy "users read own profile" on public.profiles for select using (id = auth.uid());
-create policy "users update own profile" on public.profiles for update using (id = auth.uid()) with check (id = auth.uid());
+create policy "users read own profile" on public.profiles for select using (profiles.id = auth.uid());
+create policy "users update own profile" on public.profiles for update using (profiles.id = auth.uid()) with check (profiles.id = auth.uid());
 
 create policy "members read programs" on public.programs for select
   using (public.is_organization_member(organization_id));
@@ -562,8 +562,8 @@ create policy "evaluators edit open evaluations" on public.evaluations for updat
 create policy "members read projects" on public.projects for select
   using (
     public.has_permission(organization_id, 'projects.read_all')
-    or exists (select 1 from public.project_members pm where pm.project_id = id and pm.user_id = auth.uid())
-    or exists (select 1 from public.mentor_assignments ma join public.mentors m on m.id = ma.mentor_id where ma.project_id = id and m.user_id = auth.uid())
+    or exists (select 1 from public.project_members pm where pm.project_id = projects.id and pm.user_id = auth.uid())
+    or exists (select 1 from public.mentor_assignments ma join public.mentors m on m.id = ma.mentor_id where ma.project_id = projects.id and m.user_id = auth.uid())
   );
 create policy "project managers manage projects" on public.projects for all
   using (public.has_permission(organization_id, 'projects.manage'))
