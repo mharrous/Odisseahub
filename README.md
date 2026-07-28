@@ -2,6 +2,8 @@
 
 Aplicación web para gestionar programas de incubación y aceleración: convocatorias, candidaturas, proyectos, itinerarios, mentorías, entregables, indicadores, documentos e informes.
 
+Aplicación publicada: [https://odissea-hub.pages.dev](https://odissea-hub.pages.dev)
+
 ## Estado
 
 La versión 0.1 entrega una primera aplicación funcional y navegable con persistencia local de desarrollo y una base Supabase versionada. Consulta [PROGRESS.md](./PROGRESS.md) para ver el alcance exacto y las funciones pendientes.

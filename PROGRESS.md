@@ -3,6 +3,7 @@
 ## Completado
 
 - Arquitectura React + TypeScript + Vite y configuración Cloudflare Pages.
+- Despliegue de producción en `https://odissea-hub.pages.dev`.
 - Sistema de diseño responsive, accesible y con tokens centralizados.
 - Navegación pública y privada por roles demo.
 - Dashboard de administración con métricas, alertas y gráficos.
