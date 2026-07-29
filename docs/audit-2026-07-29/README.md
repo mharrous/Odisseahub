@@ -11,6 +11,10 @@ Revisión autenticada de la navegación administrativa, barra superior, programa
 - `03-modulo-convocatorias.png`: módulo operativo de primera fase.
 - `04-proyecto-360.png`: resumen de proyecto.
 - `05-proyecto-tab-placeholder.png`: estado anterior de las pestañas sin lógica.
+- `06-final-dashboard.png`: dashboard final publicado.
+- `07-final-modulo-crud.png`: escritura real verificada en un módulo.
+- `08-final-programas-menu.png`: menú de ciclo de vida de Programas.
+- `09-final-proyecto-tab.png`: pestaña Entregables conectada a Supabase.
 
 ## Hallazgos corregidos
 

@@ -27,6 +27,7 @@
 
 .notice--danger { border-left-color: var(--danger); background: #fff0ef; color: #8f2f2a; }
 .action-menu-wrap { position: relative; }
+.table-card:has(.action-menu-wrap) { overflow: visible; }
 .action-menu { position: absolute; z-index: 12; top: calc(100% + 6px); right: 0; min-width: 170px; padding: 6px; border: 1px solid var(--line); border-radius: 12px; background: white; box-shadow: var(--shadow); }
 .action-menu button { width: 100%; min-height: 38px; padding: 0 10px; display: flex; align-items: center; gap: 8px; border: 0; border-radius: 8px; background: transparent; color: var(--text); cursor: pointer; text-align: left; }
 .action-menu button:hover { background: var(--surface-soft); }
