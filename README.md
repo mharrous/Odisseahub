@@ -6,7 +6,7 @@ Aplicación publicada: [https://odissea-hub.pages.dev](https://odissea-hub.pages
 
 ## Estado
 
-La versión 0.3 está conectada a Supabase en producción. Incluye autenticación real, roles dinámicos por organización, recuperación de contraseña, RLS endurecida, auditoría automática y almacenamiento privado. La candidatura pública crea una sesión anónima segura, guarda el borrador y el adjunto en Supabase, bloquea la solicitud presentada y genera un número de registro desde PostgreSQL. Sin variables Supabase conserva un modo demo local para desarrollo y pruebas automatizadas.
+La versión 0.4 está conectada a Supabase en producción. Incluye autenticación real, roles dinámicos por organización, recuperación de contraseña, RLS endurecida, auditoría automática y almacenamiento privado. Los módulos administrativos disponen de formularios y acciones reales para convocatorias, candidaturas, evaluaciones, cohortes, mentores, itinerarios, eventos, indicadores, documentos, informes, usuarios y configuración. La candidatura pública crea una sesión anónima segura, guarda el borrador y el adjunto en Supabase, bloquea la solicitud presentada y genera un número de registro desde PostgreSQL. Sin variables Supabase conserva un modo demo local para desarrollo y pruebas automatizadas.
 
 ## Requisitos
 
@@ -44,7 +44,7 @@ npx supabase start
 npx supabase db reset
 ```
 
-Las migraciones crean el modelo multi-organización, funciones de autorización, índices, RLS, perfiles de Auth, buckets privados y los privilegios mínimos de Data API. Las migraciones `202607290002_security_and_applications.sql` y `202607290003_storage_integrity.sql` añaden la candidatura verificable, el aislamiento por proyecto, la auditoría automática y la inmutabilidad de los adjuntos presentados. El seed aporta una organización, programa, convocatoria, cohorte, ocho proyectos, tres mentores, fases, módulos, indicadores, eventos y documentos ficticios.
+Las migraciones crean el modelo multi-organización, funciones de autorización, índices, RLS, perfiles de Auth, buckets privados y los privilegios mínimos de Data API. Las migraciones `202607290002_security_and_applications.sql` y `202607290003_storage_integrity.sql` añaden la candidatura verificable, el aislamiento por proyecto, la auditoría automática y la inmutabilidad de los adjuntos presentados. `202607290004_domain_actions.sql` incorpora las políticas de escritura, validaciones entre organizaciones, almacenamiento de documentos e informes y auditoría de las acciones administrativas. El seed aporta una organización, programa, convocatoria, cohorte, ocho proyectos, tres mentores, fases, módulos, indicadores, eventos y documentos ficticios.
 
 Los perfiles demo solo aparecen cuando Supabase no está configurado. En producción, cada usuario interno debe existir en Supabase Auth y tener una membresía activa con rol en `organization_members`. Las personas solicitantes usan Auth anónimo y solo pueden acceder a su propia candidatura y a sus archivos.
 
@@ -72,7 +72,7 @@ Build: `npm run build`. Salida: `dist`. El repositorio incluye fallback SPA y ca
 
 ## Limitaciones actuales
 
-- Los módulos de dominio sin formulario especializado muestran datos oficiales en modo consulta; ya no crean registros genéricos que parezcan operaciones reales.
-- La edición especializada de convocatorias, evaluaciones, itinerarios, mentorías, eventos, indicadores y documentos requiere siguientes iteraciones.
-- Correo, PDF/XLSX avanzado, calendario con vista mensual, comunidad en tiempo real y Copiloto requieren siguientes iteraciones.
+- La generación de informes incluye CSV y JSON; PDF/XLSX avanzado requiere una siguiente iteración.
+- Calendario con vista mensual, comunidad en tiempo real y Copiloto requieren siguientes iteraciones.
+- El correo de invitación usa el servicio incluido de Supabase hasta configurar SMTP institucional.
 - Los textos legales son marcadores y requieren validación jurídica.

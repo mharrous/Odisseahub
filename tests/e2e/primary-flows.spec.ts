@@ -74,3 +74,47 @@ test('administración: buscador, ayuda, módulo editable y ficha 360', async ({ 
   await page.getByRole('button', { name: 'Guardar' }).click()
   await expect(page.getByText('Entregable ficha E2E')).toBeVisible()
 })
+
+test('administración: todos los módulos muestran acciones funcionales completas', async ({ page }) => {
+  await page.goto('/login')
+  await page.getByRole('button', { name: 'Administración' }).click()
+  await page.getByRole('button', { name: /entrar en odissea hub/i }).click()
+
+  const modules = [
+    { path: 'convocatorias', heading: 'Convocatorias', create: 'Nueva convocatoria', edit: 'Editar', remove: 'Archivar' },
+    { path: 'evaluaciones', heading: 'Evaluaciones', create: 'Nueva evaluación', edit: 'Editar', remove: 'Eliminar' },
+    { path: 'cohortes', heading: 'Cohortes', create: 'Nueva cohorte', edit: 'Editar', remove: 'Archivar' },
+    { path: 'mentores', heading: 'Mentores', create: 'Nuevo mentor', edit: 'Editar', remove: 'Archivar' },
+    { path: 'itinerarios', heading: 'Itinerarios', create: 'Nuevo itinerario', edit: 'Editar', remove: 'Eliminar' },
+    { path: 'eventos', heading: 'Eventos', create: 'Nuevo evento', edit: 'Editar', remove: 'Eliminar' },
+    { path: 'indicadores', heading: 'Indicadores', create: 'Nuevo indicador', edit: 'Editar', remove: 'Eliminar' },
+    { path: 'documentos', heading: 'Documentos y evidencias', create: 'Nuevo documento', edit: 'Editar', remove: 'Eliminar' },
+    { path: 'informes', heading: 'Informes', create: 'Generar informe', remove: 'Eliminar' },
+    { path: 'usuarios', heading: 'Usuarios y permisos', create: 'Invitar usuario', edit: 'Editar', remove: 'Archivar' },
+  ]
+
+  for (const module of modules) {
+    await page.goto(`/admin/${module.path}`)
+    await expect(page.getByRole('heading', { name: module.heading })).toBeVisible()
+    await expect(page.getByRole('button', { name: module.create, exact: true })).toBeVisible()
+    if (module.edit) await expect(page.getByRole('button', { name: module.edit, exact: true }).first()).toBeVisible()
+    await expect(page.getByRole('button', { name: module.remove, exact: true }).first()).toBeVisible()
+    await page.getByRole('button', { name: module.create, exact: true }).click()
+    await expect(page.getByRole('button', { name: 'Cancelar', exact: true })).toBeVisible()
+    await page.getByRole('button', { name: 'Cancelar', exact: true }).click()
+  }
+
+  await page.goto('/admin/candidaturas')
+  await expect(page.getByRole('heading', { name: 'Candidaturas' })).toBeVisible()
+  await expect(page.getByRole('button', { name: 'Revisar', exact: true }).first()).toBeVisible()
+  await expect(page.getByRole('button', { name: 'Nueva candidatura', exact: true })).toHaveCount(0)
+
+  await page.goto('/admin/configuracion')
+  await page.getByRole('button', { name: 'Editar configuración', exact: true }).click()
+  await expect(page.getByRole('button', { name: 'Guardar', exact: true })).toBeVisible()
+  await page.getByRole('button', { name: 'Cancelar', exact: true }).click()
+
+  await page.goto('/admin/auditoria')
+  await expect(page.getByText('Registro inmutable obtenido de Supabase.').or(page.getByText('Los cambios se guardan de forma persistente y respetan los permisos de tu organización.'))).toBeVisible()
+  await expect(page.getByRole('button', { name: /nuevo|editar|eliminar|archivar/i })).toHaveCount(0)
+})

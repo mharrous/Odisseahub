@@ -36,6 +36,7 @@ export interface WorkspaceItem {
   dueDate?: string
   projectId?: string
   updatedAt: string
+  metadata?: Record<string, unknown>
 }
 
 export interface ApplicationDraft {
