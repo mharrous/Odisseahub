@@ -32,7 +32,7 @@ const AuthContext = createContext<AuthState | null>(null)
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [role, setRole] = useState<Role | null>(() => (
-    isSupabaseConfigured ? null : loadLocal<Role | null>('odissea-role', null)
+    isSupabaseConfigured ? null : loadLocal<Role | null>('mentoria-role', null)
   ))
   const [organizationId, setOrganizationId] = useState<string | null>(null)
   const [loading, setLoading] = useState(isSupabaseConfigured)
@@ -103,7 +103,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const login = useCallback(async ({ email, password, demoRole }: LoginCredentials) => {
     if (!supabase) {
       setRole(demoRole)
-      saveLocal('odissea-role', demoRole)
+      saveLocal('mentoria-role', demoRole)
       return demoRole
     }
 
@@ -114,7 +114,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const nextRole = await loadRemoteAccess()
       if (!nextRole) {
         await supabase.auth.signOut()
-        throw new Error('Tu cuenta todavía no tiene acceso asignado a ODISSEA HUB.')
+        throw new Error('Tu cuenta todavía no tiene acceso asignado a Mentoría.')
       }
       setRole(nextRole)
       return nextRole
@@ -127,7 +127,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (supabase) {
       await supabase.auth.signOut()
     } else {
-      localStorage.removeItem('odissea-role')
+      localStorage.removeItem('mentoria-role')
     }
     clearTenantCache()
     setRole(null)

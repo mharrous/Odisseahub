@@ -50,7 +50,7 @@ export function Modal({ title, open, onClose, children }: { title: string; open:
     : title.toLowerCase().startsWith('editar')
       ? 'Edición'
       : title.includes('Ayuda') || title === 'Notificaciones'
-        ? 'ODISSEA HUB'
+        ? 'Mentoría'
         : 'Nuevo registro'
 
   return (

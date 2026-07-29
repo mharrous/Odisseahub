@@ -65,7 +65,7 @@ export function LoginPage() {
               </div>
             )}
             {error && <div className="notice" role="alert">{error}</div>}
-            <Button type="submit" disabled={loading} icon={<ArrowRight size={17} />}>{loading ? 'Comprobando acceso…' : 'Entrar en ODISSEA HUB'}</Button>
+            <Button type="submit" disabled={loading} icon={<ArrowRight size={17} />}>{loading ? 'Comprobando acceso…' : 'Entrar en Mentoría'}</Button>
             <Link to="/recuperar-contrasena" className="muted" style={{ textAlign: 'center', fontSize: '.75rem' }}>He olvidado mi contraseña</Link>
           </form>
         </div>

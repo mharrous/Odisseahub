@@ -1,8 +1,8 @@
-# Arquitectura de ODISSEA HUB
+# Arquitectura de Mentoría
 
 ## Decisiones principales
 
-ODISSEA HUB es una SPA React + TypeScript desplegable como contenido estático en Cloudflare Pages. Supabase es la autoridad para autenticación, PostgreSQL y archivos privados. El navegador solo utiliza la clave pública `anon`; las operaciones administrativas con secretos se reservan a Edge Functions.
+Mentoría es una SPA React + TypeScript desplegable como contenido estático en Cloudflare Pages. Supabase es la autoridad para autenticación, PostgreSQL y archivos privados. El navegador solo utiliza la clave pública `anon`; las operaciones administrativas con secretos se reservan a Edge Functions.
 
 La aplicación es multi-organización desde el esquema: las entidades de negocio incluyen `organization_id`, y la pertenencia se resuelve con `organization_members`. La autorización combina roles configurables y permisos, pero nunca depende solo de la interfaz: todas las tablas expuestas tienen RLS.
 
@@ -26,7 +26,7 @@ Con variables Supabase válidas se activa el adaptador remoto. Sin credenciales,
 - Documentos en buckets privados y acceso mediante URL firmada.
 - Auditoría append-only para acciones sensibles.
 - El cliente no contiene `service_role`, proveedores de correo ni claves de IA.
-- `COPILOTO ODISSEA` permanece desactivado por feature flag.
+- `COPILOTO Mentoría` permanece desactivado por feature flag.
 
 ## Alcance de la versión 0.1
 

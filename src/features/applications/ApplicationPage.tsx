@@ -14,7 +14,7 @@ const emptyDraft: ApplicationDraft = { projectName: '', contactName: '', email: 
 export function ApplicationPage() {
   const { slug = '' } = useParams()
   const [call, setCall] = useState<PublicCall | null>(null)
-  const [draft, setDraft] = useState<ApplicationDraft>(() => isSupabaseConfigured ? emptyDraft : loadLocal<ApplicationDraft>('odissea-application', emptyDraft))
+  const [draft, setDraft] = useState<ApplicationDraft>(() => isSupabaseConfigured ? emptyDraft : loadLocal<ApplicationDraft>('mentoria-application', emptyDraft))
   const [file, setFile] = useState<File | undefined>()
   const [submitted, setSubmitted] = useState<SubmittedApplication | null>(null)
   const [saved, setSaved] = useState(false)
@@ -48,7 +48,7 @@ export function ApplicationPage() {
         if (!call) throw new Error('La convocatoria no está disponible.')
         await saveRemoteApplication(call, draft, file)
       } else {
-        saveLocal('odissea-application', draft)
+        saveLocal('mentoria-application', draft)
       }
       setSaved(true)
       window.setTimeout(() => setSaved(false), 1800)
@@ -71,13 +71,13 @@ export function ApplicationPage() {
       } else {
         const completed: SubmittedApplication = {
           id: 'demo-application',
-          registration: `ODI-DEMO-${String(Math.floor(Math.random() * 9999)).padStart(4, '0')}`,
+          registration: `MEN-DEMO-${String(Math.floor(Math.random() * 9999)).padStart(4, '0')}`,
           projectName: draft.projectName,
           contactName: draft.contactName,
           submittedAt: new Date().toISOString(),
         }
         setSubmitted(completed)
-        saveLocal('odissea-application', { ...draft, status: 'submitted', registration: completed.registration, submittedAt: completed.submittedAt })
+        saveLocal('mentoria-application', { ...draft, status: 'submitted', registration: completed.registration, submittedAt: completed.submittedAt })
       }
     } catch (submitError) {
       setError(submitError instanceof Error ? submitError.message : 'No se ha podido presentar la candidatura.')
@@ -88,7 +88,7 @@ export function ApplicationPage() {
 
   const downloadReceipt = () => {
     if (!submitted) return
-    const text = `RESGUARDO DE PRESENTACIÓN\nODISSEA HUB\n\nRegistro: ${submitted.registration}\nIdentificador: ${submitted.id}\nProyecto: ${submitted.projectName}\nTitular: ${submitted.contactName}\nFecha: ${new Date(submitted.submittedAt).toLocaleString('es-ES')}\n`
+    const text = `RESGUARDO DE PRESENTACIÓN\nMentoría\n\nRegistro: ${submitted.registration}\nIdentificador: ${submitted.id}\nProyecto: ${submitted.projectName}\nTitular: ${submitted.contactName}\nFecha: ${new Date(submitted.submittedAt).toLocaleString('es-ES')}\n`
     const url = URL.createObjectURL(new Blob([text], { type: 'text/plain;charset=utf-8' }))
     const anchor = document.createElement('a')
     anchor.href = url
@@ -109,7 +109,7 @@ export function ApplicationPage() {
             <span className="success-icon"><Check size={30} /></span>
             <span className="eyebrow">Candidatura registrada</span>
             <h1>Tu proyecto ya está registrado</h1>
-            <p className="muted">La candidatura de <strong>{submitted.projectName}</strong> se ha guardado en ODISSEA HUB. Conserva el número de registro.</p>
+            <p className="muted">La candidatura de <strong>{submitted.projectName}</strong> se ha guardado en Mentoría. Conserva el número de registro.</p>
             <div className="card" style={{ margin: '25px auto', maxWidth: 420, background: '#f8fafc' }}><span className="muted" style={{ fontSize: '.7rem' }}>Número de registro</span><h2 style={{ margin: '5px 0 0' }}>{submitted.registration}</h2></div>
             <Button onClick={downloadReceipt} icon={<Download size={17} />}>Descargar resguardo</Button>
           </section>

@@ -20,24 +20,24 @@ import type { WorkspaceItem } from '../../types/domain'
 import { useAuth } from '../auth/AuthContext'
 
 const moduleConfig: Record<string, { title: string; description: string; item: string; samples?: string[]; readonly?: boolean }> = {
-  convocatorias: { title: 'Convocatorias', description: 'Publica oportunidades y gestiona sus formularios, plazos y criterios.', item: 'convocatoria', samples: ['Primera convocatoria ODISSEA'] },
-  candidaturas: { title: 'Candidaturas', description: 'Revisa documentación, estados y trazabilidad de cada solicitud.', item: 'candidatura', samples: ['ODI-2026-0012 · HydroSense', 'ODI-2026-0015 · Gadir Cloud', 'ODI-2026-0018 · BioMarine Labs'] },
+  convocatorias: { title: 'Convocatorias', description: 'Publica oportunidades y gestiona sus formularios, plazos y criterios.', item: 'convocatoria', samples: ['Primera convocatoria Mentoría'] },
+  candidaturas: { title: 'Candidaturas', description: 'Revisa documentación, estados y trazabilidad de cada solicitud.', item: 'candidatura', samples: ['MEN-2026-0012 · HydroSense', 'MEN-2026-0015 · Gadir Cloud', 'MEN-2026-0018 · BioMarine Labs'] },
   evaluaciones: { title: 'Evaluaciones', description: 'Asigna evaluadores, configura rúbricas y consolida el ranking.', item: 'evaluación', samples: ['Rúbrica tecnológica · 5 criterios', 'Comité de selección · Septiembre'] },
-  cohortes: { title: 'Cohortes', description: 'Agrupa los proyectos seleccionados y asigna su equipo de seguimiento.', item: 'cohorte', samples: ['Cohorte ODISSEA 2026 · 8 proyectos'] },
-  itinerarios: { title: 'Itinerarios', description: 'Ordena fases, módulos y actividades para cada programa.', item: 'itinerario', samples: ['Itinerario base ODISSEA · 2 fases · 9 módulos'] },
+  cohortes: { title: 'Cohortes', description: 'Agrupa los proyectos seleccionados y asigna su equipo de seguimiento.', item: 'cohorte', samples: ['Cohorte Mentoría 2026 · 8 proyectos'] },
+  itinerarios: { title: 'Itinerarios', description: 'Ordena fases, módulos y actividades para cada programa.', item: 'itinerario', samples: ['Itinerario base Mentoría · 2 fases · 9 módulos'] },
   mentores: { title: 'Mentores', description: 'Gestiona perfiles, especialidades, disponibilidad y asignaciones.', item: 'mentor', samples: ['Lucía Romero · Estrategia', 'Álvaro Peña · Finanzas', 'Marta Soler · Comercialización'] },
   eventos: { title: 'Eventos', description: 'Coordina talleres, jornadas y sesiones con control de asistencia.', item: 'evento', samples: ['Taller de estrategia comercial · 30 jul', 'Comité de seguimiento · 6 ago'] },
   indicadores: { title: 'Indicadores', description: 'Controla metas, evidencias e histórico de valores del programa.', item: 'indicador', samples: ['RCO01 · 100%', 'RCO04 · 76%', 'Horas de mentoría · 133 h'] },
   documentos: { title: 'Documentos y evidencias', description: 'Repositorio privado con versiones, etiquetas y visibilidad controlada.', item: 'documento', samples: ['Bases reguladoras.pdf', 'Acta comité 02.pdf', 'Plantilla modelo financiero.xlsx'] },
   informes: { title: 'Informes', description: 'Genera archivos auditables con los datos actuales del programa.', item: 'informe', samples: ['Informe mensual · Julio', 'Seguimiento de indicadores · T2'] },
-  usuarios: { title: 'Usuarios y permisos', description: 'Invita usuarios y gestiona su rol y estado en la organización.', item: 'usuario', samples: ['Administrador ODISSEA', 'Coordinación del programa'] },
+  usuarios: { title: 'Usuarios y permisos', description: 'Invita usuarios y gestiona su rol y estado en la organización.', item: 'usuario', samples: ['Administrador Mentoría', 'Coordinación del programa'] },
   configuracion: { title: 'Configuración', description: 'Marca, datos legales, notificaciones y funciones de la organización.', item: 'ajuste', samples: ['Identidad visual', 'Privacidad y textos legales', 'Preferencias de correo'] },
   auditoria: { title: 'Auditoría', description: 'Consulta acciones sensibles sin posibilidad de edición.', item: 'registro', samples: ['María Campos publicó una convocatoria', 'Lucía Romero registró un acta', 'Sistema bloqueó un acceso no autorizado'], readonly: true },
   itinerario: { title: 'Mi itinerario', description: 'Continúa las actividades de tu fase actual.', item: 'actividad', samples: ['Propuesta de valor · Completado', 'Validación de mercado · En curso', 'Modelo financiero · Bloqueado'] },
   entregables: { title: 'Entregables', description: 'Prepara, presenta y consulta las revisiones de tus entregables.', item: 'entregable', samples: ['Validación de mercado · En curso', 'Canvas de negocio · Aprobado', 'Plan financiero · No iniciado'] },
   mentorias: { title: 'Mentorías', description: 'Consulta próximas sesiones, actas y acuerdos.', item: 'sesión', samples: ['Revisión del modelo comercial · 4 ago', 'Validación técnica · 18 ago'] },
   calendario: { title: 'Calendario', description: 'Sesiones, eventos y fechas límite en una sola agenda.', item: 'evento', samples: ['30 jul · Taller comercial', '4 ago · Mentoría', '6 ago · Comité mensual'] },
-  comunidad: { title: 'Comunidad', description: 'Canales sencillos para compartir anuncios y recursos.', item: 'publicación', samples: ['Canal general · 3 publicaciones nuevas', 'Cohorte ODISSEA · Aviso fijado'] },
+  comunidad: { title: 'Comunidad', description: 'Canales sencillos para compartir anuncios y recursos.', item: 'publicación', samples: ['Canal general · 3 publicaciones nuevas', 'Cohorte Mentoría · Aviso fijado'] },
   perfil: { title: 'Mi perfil', description: 'Actualiza tus datos y preferencias de notificación.', item: 'dato', samples: ['Datos personales', 'Seguridad', 'Notificaciones'] },
   sesiones: { title: 'Sesiones', description: 'Programa sesiones y registra actas, acuerdos y horas.', item: 'sesión', samples: ['Abyla Robotics · 4 ago', 'Neptuno Secure · 8 ago'] },
   horas: { title: 'Control de horas', description: 'Registra horas justificables asociadas a cada proyecto.', item: 'registro', samples: ['Julio · 8 h', 'Junio · 12 h'] },
@@ -198,15 +198,15 @@ function fallbackItems(kind: string): WorkspaceItem[] {
     id: `sample-${kind}-${index}`,
     kind,
     title,
-    description: 'Primera convocatoria ODISSEA',
+    description: 'Primera convocatoria Mentoría',
     status: index === 1 ? 'En curso' : 'Disponible',
-    owner: index % 2 ? 'Coordinación ODISSEA' : 'María Campos',
+    owner: index % 2 ? 'Coordinación Mentoría' : 'María Campos',
     updatedAt: new Date(2026, 6, index + 24).toISOString(),
   }))
 }
 
 export function ModulePage({ kind }: { kind: string }) {
-  const config = moduleConfig[kind] ?? { title: 'Módulo', description: 'Área funcional de ODISSEA HUB.', item: 'registro' }
+  const config = moduleConfig[kind] ?? { title: 'Módulo', description: 'Área funcional de Mentoría.', item: 'registro' }
   const { role } = useAuth()
   const domainBacked = isSupabaseConfigured && domainBackedKinds.has(kind)
   const roleReadOnly = (role === 'participant' && kind === 'documentos') || (role === 'evaluator' && kind === 'candidaturas')
@@ -332,7 +332,7 @@ export function ModulePage({ kind }: { kind: string }) {
 
   return (
     <>
-      <div className="breadcrumb">ODISSEA HUB / <span>{config.title}</span></div>
+      <div className="breadcrumb">Mentoría / <span>{config.title}</span></div>
       <PageHeader title={config.title} description={config.description} action={headerAction} />
       {error && <div className="notice notice--danger" role="alert">{error}</div>}
       <div className="table-card">
@@ -383,7 +383,7 @@ export function ModulePage({ kind }: { kind: string }) {
               <div className="form-group form-group--full"><label htmlFor="workspace-title">Nombre *</label><input className="field" id="workspace-title" name="title" defaultValue={editing?.title} required /></div>
               <div className="form-group form-group--full"><label htmlFor="workspace-description">Descripción</label><textarea className="textarea" id="workspace-description" name="description" defaultValue={editing?.description} /></div>
               <div className="form-group"><label htmlFor="workspace-status">Estado</label><select className="select" id="workspace-status" name="status" defaultValue={editing?.status ?? 'Disponible'}>{['Disponible', 'En curso', 'Completado', 'Archivado'].map((value) => <option key={value}>{value}</option>)}</select></div>
-              <div className="form-group"><label htmlFor="workspace-owner">Responsable *</label><input className="field" id="workspace-owner" name="owner" defaultValue={editing?.owner ?? 'Coordinación ODISSEA'} required /></div>
+              <div className="form-group"><label htmlFor="workspace-owner">Responsable *</label><input className="field" id="workspace-owner" name="owner" defaultValue={editing?.owner ?? 'Coordinación Mentoría'} required /></div>
               <div className="form-group form-group--full"><label htmlFor="workspace-due">Fecha objetivo</label><input className="field" id="workspace-due" name="dueDate" type="date" defaultValue={editing?.dueDate} /></div>
             </div>
           )}

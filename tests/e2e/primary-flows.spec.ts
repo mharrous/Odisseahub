@@ -3,7 +3,7 @@ import { expect, test } from '@playwright/test'
 test('administración: acceso, dashboard y creación persistente de programa', async ({ page }) => {
   await page.goto('/login')
   await page.getByRole('button', { name: 'Administración' }).click()
-  await page.getByRole('button', { name: /entrar en odissea hub/i }).click()
+  await page.getByRole('button', { name: /entrar en mentoría/i }).click()
   await expect(page.getByRole('heading', { name: /el programa, de un vistazo/i })).toBeVisible()
   if ((page.viewportSize()?.width ?? 1440) < 700) {
     await page.getByRole('button', { name: 'Abrir menú' }).click()
@@ -20,7 +20,7 @@ test('administración: acceso, dashboard y creación persistente de programa', a
 })
 
 test('candidatura: borrador, documento, presentación y resguardo', async ({ page }) => {
-  await page.goto('/convocatorias/primera-odissea/solicitud')
+  await page.goto('/convocatorias/primera-mentoria/solicitud')
   await page.getByLabel('Nombre del proyecto *').fill('Proyecto de prueba')
   await page.getByLabel('Persona de contacto *').fill('Persona Ficticia')
   await page.getByLabel('Correo electrónico *').fill('demo@example.invalid')
@@ -37,7 +37,7 @@ test('candidatura: borrador, documento, presentación y resguardo', async ({ pag
 test('Rutas privadas bloquean a un participante', async ({ page }) => {
   await page.goto('/login')
   await page.getByRole('button', { name: 'Participante' }).click()
-  await page.getByRole('button', { name: /entrar en odissea hub/i }).click()
+  await page.getByRole('button', { name: /entrar en mentoría/i }).click()
   await page.goto('/admin/auditoria')
   await expect(page.getByRole('heading', { name: /no tienes permiso/i })).toBeVisible()
 })
@@ -45,14 +45,14 @@ test('Rutas privadas bloquean a un participante', async ({ page }) => {
 test('administración: buscador, ayuda, módulo editable y ficha 360', async ({ page }) => {
   await page.goto('/login')
   await page.getByRole('button', { name: 'Administración' }).click()
-  await page.getByRole('button', { name: /entrar en odissea hub/i }).click()
+  await page.getByRole('button', { name: /entrar en mentoría/i }).click()
 
   if ((page.viewportSize()?.width ?? 1440) >= 700) {
-    await page.getByLabel('Buscar en ODISSEA HUB').fill('eventos')
+    await page.getByLabel('Buscar en Mentoría').fill('eventos')
     await page.getByRole('option', { name: /eventos/i }).click()
     await expect(page.getByRole('heading', { name: 'Eventos' })).toBeVisible()
     await page.getByRole('button', { name: 'Ayuda' }).click()
-    await expect(page.getByRole('heading', { name: 'Ayuda de ODISSEA HUB' })).toBeVisible()
+    await expect(page.getByRole('heading', { name: 'Ayuda de Mentoría' })).toBeVisible()
     await page.getByRole('button', { name: 'Cerrar', exact: true }).click()
   }
 
@@ -78,7 +78,7 @@ test('administración: buscador, ayuda, módulo editable y ficha 360', async ({ 
 test('administración: todos los módulos muestran acciones funcionales completas', async ({ page }) => {
   await page.goto('/login')
   await page.getByRole('button', { name: 'Administración' }).click()
-  await page.getByRole('button', { name: /entrar en odissea hub/i }).click()
+  await page.getByRole('button', { name: /entrar en mentoría/i }).click()
 
   const modules = [
     { path: 'convocatorias', heading: 'Convocatorias', create: 'Nueva convocatoria', edit: 'Editar', remove: 'Archivar' },

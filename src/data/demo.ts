@@ -2,8 +2,8 @@ import type { Program, Project } from '../types/domain'
 
 export const initialPrograms: Program[] = [
   {
-    id: 'program-odissea-01',
-    name: 'Primera convocatoria ODISSEA',
+    id: 'program-mentoria-01',
+    name: 'Primera convocatoria Mentoría',
     entity: 'Cámara de Comercio de Ceuta',
     status: 'Activo',
     places: 8,

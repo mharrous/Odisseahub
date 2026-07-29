@@ -155,8 +155,8 @@ export function AppLayout() {
           ))}
         </nav>
         <button className="sidebar__footer" onClick={handleLogout} style={{ borderInline: 0, borderBottom: 0, background: 'transparent', color: 'white', textAlign: 'left', cursor: 'pointer' }}>
-          <span className="avatar">{initials || 'OD'}</span>
-          <span><strong>{profile?.displayName ?? 'Usuario ODISSEA'}</strong><small>{role ? roleLabels[role] : 'Usuario'} · Cerrar sesión</small></span>
+          <span className="avatar">{initials || 'ME'}</span>
+          <span><strong>{profile?.displayName ?? 'Usuario Mentoría'}</strong><small>{role ? roleLabels[role] : 'Usuario'} · Cerrar sesión</small></span>
         </button>
       </aside>
       <div className="main-wrap">
@@ -166,7 +166,7 @@ export function AppLayout() {
           </button>
           <form className="search" onSubmit={submitSearch}>
             <Search size={18} aria-hidden="true" />
-            <input value={searchQuery} onChange={(event) => setSearchQuery(event.target.value)} aria-label="Buscar en ODISSEA HUB" placeholder="Buscar una sección..." autoComplete="off" />
+            <input value={searchQuery} onChange={(event) => setSearchQuery(event.target.value)} aria-label="Buscar en Mentoría" placeholder="Buscar una sección..." autoComplete="off" />
             {searchQuery.trim().length >= 2 && (
               <div className="global-search-results" role="listbox" aria-label="Resultados de búsqueda">
                 {searchResults.length ? searchResults.map(([path, label, Icon]) => (
@@ -193,7 +193,7 @@ export function AppLayout() {
           </nav>
         )}
       </div>
-      <Modal title="Ayuda de ODISSEA HUB" open={helpOpen} onClose={() => setHelpOpen(false)}>
+      <Modal title="Ayuda de Mentoría" open={helpOpen} onClose={() => setHelpOpen(false)}>
         <div className="help-list">
           <section><strong>Navegación</strong><p>Usa el menú lateral para acceder a las áreas disponibles según tu rol.</p></section>
           <section><strong>Datos y permisos</strong><p>Los cambios se guardan en Supabase y solo son visibles para los miembros autorizados de tu organización.</p></section>

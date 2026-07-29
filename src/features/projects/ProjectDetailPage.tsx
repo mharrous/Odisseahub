@@ -76,7 +76,7 @@ export function ProjectDetailPage() {
       <div className="breadcrumb">Proyectos / <span>{project.name}</span></div>
       {error && <div className="notice notice--danger" role="alert">{error}</div>}
       <section className="project-hero">
-        <div className="project-hero__top"><span className="project-logo">{project.name.slice(0, 2).toUpperCase()}</span><div><Badge tone={project.status === 'En riesgo' ? 'danger' : 'success'}>{project.status}</Badge><h1>{project.name}</h1><p>{project.sector} · Primera cohorte ODISSEA</p></div></div>
+        <div className="project-hero__top"><span className="project-logo">{project.name.slice(0, 2).toUpperCase()}</span><div><Badge tone={project.status === 'En riesgo' ? 'danger' : 'success'}>{project.status}</Badge><h1>{project.name}</h1><p>{project.sector} · Primera cohorte Mentoría</p></div></div>
         <div className="project-hero__stats">
           <div className="project-stat"><span>Fase actual</span><strong>{project.phase}</strong></div>
           <div className="project-stat"><span>Progreso</span><strong>{project.progress}%</strong></div>

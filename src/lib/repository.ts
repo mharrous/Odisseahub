@@ -4,7 +4,7 @@ import { isSupabaseConfigured, supabase } from './supabase'
 import { loadLocal, makeId, saveLocal } from './storage'
 import { DEMO_ORGANIZATION_ID, resolveOrganizationId } from './tenant'
 
-export const ODISSEA_ORGANIZATION_ID = DEMO_ORGANIZATION_ID
+export const MENTORIA_ORGANIZATION_ID = DEMO_ORGANIZATION_ID
 
 const programStatusToDb: Record<Program['status'], string> = {
   Borrador: 'draft',
@@ -37,7 +37,7 @@ function mapProgram(row: Record<string, unknown>): Program {
   return {
     id: String(row.id),
     name: String(row.name),
-    entity: String(row.organization_name ?? 'Organización ODISSEA'),
+    entity: String(row.organization_name ?? 'Organización Mentoría'),
     status: programStatusFromDb[String(row.status)] ?? 'Borrador',
     places: Number(row.places ?? 0),
     projects: Number(row.project_count ?? 0),
@@ -49,7 +49,7 @@ function mapProgram(row: Record<string, unknown>): Program {
 }
 
 export async function listPrograms(): Promise<Program[]> {
-  if (!isSupabaseConfigured) return loadLocal<Program[]>('odissea-programs', initialPrograms)
+  if (!isSupabaseConfigured) return loadLocal<Program[]>('mentoria-programs', initialPrograms)
   const client = assertSupabase()
   const organizationId = await resolveOrganizationId()
   const [programResult, cohortResult, projectResult, organizationResult] = await Promise.all([
@@ -80,7 +80,7 @@ export async function listPrograms(): Promise<Program[]> {
 
 export async function createProgram(input: Omit<Program, 'id' | 'entity' | 'projects' | 'progress' | 'status' | 'color'>): Promise<Program> {
   if (!isSupabaseConfigured) {
-    const current = loadLocal<Program[]>('odissea-programs', initialPrograms)
+    const current = loadLocal<Program[]>('mentoria-programs', initialPrograms)
     const next: Program = {
       id: makeId('program'),
       entity: 'Cámara de Comercio de Ceuta',
@@ -90,7 +90,7 @@ export async function createProgram(input: Omit<Program, 'id' | 'entity' | 'proj
       color: '#13B8A6',
       ...input,
     }
-    saveLocal('odissea-programs', [...current, next])
+    saveLocal('mentoria-programs', [...current, next])
     return next
   }
   const client = assertSupabase()
@@ -110,8 +110,8 @@ export async function createProgram(input: Omit<Program, 'id' | 'entity' | 'proj
 
 export async function updateProgram(program: Program): Promise<Program> {
   if (!isSupabaseConfigured) {
-    const current = loadLocal<Program[]>('odissea-programs', initialPrograms)
-    saveLocal('odissea-programs', current.map((item) => item.id === program.id ? program : item))
+    const current = loadLocal<Program[]>('mentoria-programs', initialPrograms)
+    saveLocal('mentoria-programs', current.map((item) => item.id === program.id ? program : item))
     return program
   }
   const { data, error } = await assertSupabase().from('programs').update({
@@ -137,8 +137,8 @@ export async function duplicateProgram(program: Program): Promise<Program> {
 
 export async function removeProgram(id: string): Promise<void> {
   if (!isSupabaseConfigured) {
-    const current = loadLocal<Program[]>('odissea-programs', initialPrograms)
-    saveLocal('odissea-programs', current.filter((item) => item.id !== id))
+    const current = loadLocal<Program[]>('mentoria-programs', initialPrograms)
+    saveLocal('mentoria-programs', current.filter((item) => item.id !== id))
     return
   }
   const { error } = await assertSupabase().from('programs').update({ deleted_at: new Date().toISOString() }).eq('id', id)
@@ -215,7 +215,7 @@ export async function getProject(id: string): Promise<Project | null> {
 }
 
 function workspaceKey(kind: string, projectId?: string) {
-  return `odissea-workspace-${kind}-${projectId ?? 'organization'}`
+  return `mentoria-workspace-${kind}-${projectId ?? 'organization'}`
 }
 
 function mapWorkspaceItem(row: Record<string, unknown>): WorkspaceItem {
@@ -225,7 +225,7 @@ function mapWorkspaceItem(row: Record<string, unknown>): WorkspaceItem {
     title: String(row.title),
     description: String(row.description ?? ''),
     status: String(row.status ?? 'Disponible') as WorkspaceItem['status'],
-    owner: String(row.owner_name ?? 'Coordinación ODISSEA'),
+    owner: String(row.owner_name ?? 'Coordinación Mentoría'),
     dueDate: row.due_on ? String(row.due_on) : undefined,
     projectId: row.project_id ? String(row.project_id) : undefined,
     updatedAt: String(row.updated_at ?? new Date().toISOString()),

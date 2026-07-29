@@ -32,4 +32,4 @@ Antes de publicar cambios de Auth, RLS o Storage:
 8. Probar altas, edición, archivado y eliminación con una cuenta administrativa real, incluido un documento de prueba y un informe.
 9. Confirmar que `invite-user` rechaza peticiones sin sesión y que una invitación autorizada crea Auth, perfil y membresía.
 
-La prueba remota manual del 29 de julio de 2026 completó los pasos 1 a 5 con `ODI-2026-000001`.
+La prueba remota manual del 29 de julio de 2026 completó los pasos 1 a 5 con `MEN-2026-000001`.

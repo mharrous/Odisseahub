@@ -4,7 +4,7 @@ values ('10000000-0000-0000-0000-000000000001', 'Cámara de Comercio de Ceuta', 
 on conflict (id) do nothing;
 
 insert into public.organization_settings (organization_id, contact_email)
-values ('10000000-0000-0000-0000-000000000001', 'odissea@example.invalid')
+values ('10000000-0000-0000-0000-000000000001', 'mentoria@example.invalid')
 on conflict (organization_id) do nothing;
 
 insert into public.permissions (code, description) values
@@ -35,7 +35,7 @@ insert into public.programs (id, organization_id, name, description, objectives,
 values (
   '20000000-0000-0000-0000-000000000001',
   '10000000-0000-0000-0000-000000000001',
-  'Primera convocatoria ODISSEA',
+  'Primera convocatoria Mentoría',
   'Programa de incubación y consolidación para proyectos de alta tecnología.',
   'Validación, crecimiento, acceso a mercado y preparación para financiación.',
   'active', 8, '2026-02-01', '2027-01-31', '#1677FF'
@@ -46,9 +46,9 @@ values (
   '21000000-0000-0000-0000-000000000001',
   '10000000-0000-0000-0000-000000000001',
   '20000000-0000-0000-0000-000000000001',
-  'Primera convocatoria ODISSEA', 'primera-odissea',
+  'Primera convocatoria Mentoría', 'primera-mentoria',
   'Convocatoria para ocho proyectos tecnológicos.', '2026-07-01', '2026-09-30 23:59:59+02',
-  8, 'published', 'Texto demostrativo pendiente de validación jurídica.', 'odissea@example.invalid'
+  8, 'published', 'Texto demostrativo pendiente de validación jurídica.', 'mentoria@example.invalid'
 ) on conflict (id) do nothing;
 
 insert into public.cohorts (id, organization_id, program_id, call_id, name, starts_on, ends_on, status)
@@ -57,7 +57,7 @@ values (
   '10000000-0000-0000-0000-000000000001',
   '20000000-0000-0000-0000-000000000001',
   '21000000-0000-0000-0000-000000000001',
-  'Cohorte ODISSEA 2026', '2026-02-01', '2027-01-31', 'active'
+  'Cohorte Mentoría 2026', '2026-02-01', '2027-01-31', 'active'
 ) on conflict (id) do nothing;
 
 insert into public.projects (id, organization_id, cohort_id, name, description, sector, status, maturity_stage, progress) values
@@ -78,7 +78,7 @@ insert into public.mentors (id, organization_id, full_name, biography, languages
 on conflict (id) do nothing;
 
 insert into public.itineraries (id, organization_id, program_id, name)
-values ('50000000-0000-0000-0000-000000000001','10000000-0000-0000-0000-000000000001','20000000-0000-0000-0000-000000000001','Itinerario base ODISSEA')
+values ('50000000-0000-0000-0000-000000000001','10000000-0000-0000-0000-000000000001','20000000-0000-0000-0000-000000000001','Itinerario base Mentoría')
 on conflict (id) do nothing;
 insert into public.phases (id, organization_id, itinerary_id, title, description, position, duration_days) values
   ('51000000-0000-0000-0000-000000000001','10000000-0000-0000-0000-000000000001','50000000-0000-0000-0000-000000000001','Incubación','Análisis, propuesta de valor, modelo, mercado y Demo Day.',1,120),
@@ -98,7 +98,7 @@ insert into public.indicators (id, organization_id, program_id, code, name, data
 on conflict (id) do nothing;
 
 insert into public.events (id, organization_id, program_id, title, event_type, starts_at, ends_at, capacity, location) values
-  ('70000000-0000-0000-0000-000000000001','10000000-0000-0000-0000-000000000001','20000000-0000-0000-0000-000000000001','Taller de estrategia comercial','workshop','2026-07-30 10:00:00+02','2026-07-30 13:00:00+02',30,'Espacio ODISSEA'),
+  ('70000000-0000-0000-0000-000000000001','10000000-0000-0000-0000-000000000001','20000000-0000-0000-0000-000000000001','Taller de estrategia comercial','workshop','2026-07-30 10:00:00+02','2026-07-30 13:00:00+02',30,'Espacio Mentoría'),
   ('70000000-0000-0000-0000-000000000002','10000000-0000-0000-0000-000000000001','20000000-0000-0000-0000-000000000001','Comité mensual de seguimiento','meeting','2026-08-06 09:30:00+02','2026-08-06 11:00:00+02',20,'Online')
 on conflict (id) do nothing;
 

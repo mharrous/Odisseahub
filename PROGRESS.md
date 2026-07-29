@@ -3,7 +3,8 @@
 ## Completado
 
 - Arquitectura React + TypeScript + Vite y configuración Cloudflare Pages.
-- Despliegue de producción en `https://odissea-hub.pages.dev`.
+- Despliegue de producción en `https://mentoria.pages.dev`.
+- Identidad completa renombrada a Mentoría en frontend, Supabase, autenticación y rutas públicas.
 - Sistema de diseño responsive, accesible y con tokens centralizados.
 - Navegación pública y privada por roles demo.
 - Dashboard de administración con métricas, alertas y gráficos.
@@ -27,7 +28,7 @@
 - Buckets privados y trigger automático de perfiles.
 - Data API pública limitada por RLS: solo convocatorias publicadas; programas y proyectos privados no se exponen.
 - URL de producción y redirecciones de Auth configuradas.
-- Auth anónimo habilitado y flujo remoto completo verificado con el registro `ODI-2026-000001`.
+- Auth anónimo habilitado y flujo remoto completo verificado con el registro `MEN-2026-000001`.
 - CI de GitHub para lint, TypeScript, unitarias, E2E y build.
 - Acciones administrativas protegidas por RLS, validación de relaciones multi-organización y auditoría ampliada.
 - Prueba E2E exhaustiva de botones y modales de los módulos administrativos en escritorio y móvil.
@@ -42,7 +43,7 @@
 - Editor enriquecido, calendario avanzado, comunidad y generación PDF/XLSX.
 - Plantillas avanzadas de informes PDF/XLSX y correo institucional.
 - Realtime selectivo.
-- Copiloto ODISSEA (desactivado).
+- Copiloto Mentoría (desactivado).
 - Pruebas E2E autenticadas con cuentas reales de mentor, evaluador y participante.
 
 ## Bloqueos

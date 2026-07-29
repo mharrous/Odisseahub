@@ -95,7 +95,7 @@ function EvaluatorDashboard({ profile, applications }: { profile: UserProfile | 
         <article className="metric-card"><div><p>Finalizadas</p><strong>{applications.filter((item) => item.status === 'Completado').length}</strong></div><span className="metric-card__icon"><CheckCircle2 size={20}/></span><small>Evaluaciones cerradas</small></article>
       </section>
       <section className="card dashboard-section">
-        <div className="card-head"><h2>Candidaturas asignadas</h2><span className="badge badge--info">Rúbrica ODISSEA</span></div>
+        <div className="card-head"><h2>Candidaturas asignadas</h2><span className="badge badge--info">Rúbrica Mentoría</span></div>
         {applications.length ? <div className="milestone-list">{applications.map((application) => <button className="milestone milestone--button" key={application.id} onClick={() => navigate('/evaluador/candidaturas')}><span className="milestone__dot" /><div><strong>{application.title}</strong><p>{application.description}</p></div></button>)}</div> : <EmptyState title="Sin candidaturas asignadas" description="No tienes evaluaciones pendientes en este momento." />}
       </section>
     </>

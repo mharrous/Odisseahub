@@ -1,7 +1,7 @@
 import type { ApplicationDraft, PublicCall, SubmittedApplication } from '../types/domain'
 import { isSupabaseConfigured, supabase } from './supabase'
 
-const remoteDraftKey = 'odissea-remote-application-id'
+const remoteDraftKey = 'mentoria-remote-application-id'
 const applicationBucket = 'application-files'
 
 function client() {
@@ -30,14 +30,14 @@ export async function listPublicCalls(): Promise<PublicCall[]> {
     return [{
       id: 'demo-call',
       organizationId: 'demo-organization',
-      slug: 'primera-odissea',
-      name: 'Primera convocatoria ODISSEA',
+      slug: 'primera-mentoria',
+      name: 'Primera convocatoria Mentoría',
       description: 'Programa de incubación y consolidación para proyectos tecnológicos.',
       closesAt: '2026-09-30T21:59:59.000Z',
       places: 8,
       status: 'published',
       privacyText: 'Texto de demostración.',
-      contactEmail: 'odissea@example.invalid',
+      contactEmail: 'mentoria@example.invalid',
     }]
   }
 
@@ -71,7 +71,7 @@ async function ensureApplicant() {
   if (userData.user) return userData.user
 
   const { data, error } = await supabaseClient.auth.signInAnonymously({
-    options: { data: { display_name: 'Solicitante ODISSEA' } },
+    options: { data: { display_name: 'Solicitante Mentoría' } },
   })
   if (error) throw new Error(`No se ha podido iniciar la candidatura: ${error.message}`)
   if (!data.user) throw new Error('No se ha podido crear la sesión segura de candidatura.')

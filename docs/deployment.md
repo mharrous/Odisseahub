@@ -23,7 +23,7 @@ La `service_role` nunca debe configurarse como variable `VITE_*` ni llegar al na
 También se admite despliegue directo:
 
 ```powershell
-npx wrangler pages deploy .\dist --project-name=odissea-hub
+npx wrangler pages deploy .\dist --project-name=mentoria
 ```
 
-Tras publicar, verifica `https://odissea-hub.pages.dev`, el inicio de sesión y al menos una acción administrativa real.
+Tras publicar, verifica `https://mentoria.pages.dev`, el inicio de sesión y al menos una acción administrativa real.

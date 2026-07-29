@@ -28,7 +28,7 @@ export function PasswordRecoveryPage({ update = false }: { update?: boolean }) {
       if (update) {
         const { error: updateError } = await supabase.auth.updateUser({ password })
         if (updateError) throw updateError
-        setMessage('Contraseña actualizada. Ya puedes acceder a ODISSEA HUB.')
+        setMessage('Contraseña actualizada. Ya puedes acceder a Mentoría.')
         window.setTimeout(() => navigate('/login'), 1200)
       } else {
         const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
@@ -56,7 +56,7 @@ export function PasswordRecoveryPage({ update = false }: { update?: boolean }) {
       </section>
       <section className="auth-panel">
         <div className="auth-card">
-          <span className="eyebrow">ODISSEA HUB</span>
+          <span className="eyebrow">Mentoría</span>
           <h1>{update ? 'Nueva contraseña' : 'Recuperar contraseña'}</h1>
           <p className="muted">{update ? 'Introduce una contraseña nueva para tu cuenta.' : 'Indica el correo asociado a tu cuenta.'}</p>
           {!isSupabaseConfigured && <div className="notice">Esta función no está activa en modo demostración.</div>}

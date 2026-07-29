@@ -171,7 +171,7 @@ export function ProgramsPage() {
       <Modal title={editing ? 'Editar programa' : 'Crear programa'} open={open || Boolean(editing)} onClose={closeForm}>
         <form onSubmit={submitProgram}>
           <div className="form-grid">
-            <div className="form-group form-group--full"><label htmlFor="name">Nombre *</label><input className="field" id="name" name="name" defaultValue={editing?.name} required placeholder="Ej. ODISSEA Crece 2027" /></div>
+            <div className="form-group form-group--full"><label htmlFor="name">Nombre *</label><input className="field" id="name" name="name" defaultValue={editing?.name} required placeholder="Ej. Mentoría Crece 2027" /></div>
             <div className="form-group"><label htmlFor="places">Número de plazas *</label><input className="field" id="places" name="places" type="number" min="1" defaultValue={editing?.places ?? 8} required /></div>
             <div className="form-group"><label htmlFor="status">Estado</label><select className="select" id="status" name="status" defaultValue={editing?.status ?? 'Borrador'} disabled={!editing}>{['Borrador', 'Publicado', 'Activo', 'Finalizado'].map((value) => <option key={value}>{value}</option>)}</select></div>
             <div className="form-group"><label htmlFor="startDate">Fecha de inicio *</label><input className="field" id="startDate" name="startDate" type="date" defaultValue={editing?.startDate} required /></div>

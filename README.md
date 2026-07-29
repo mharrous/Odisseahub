@@ -1,12 +1,12 @@
-# ODISSEA HUB
+# Mentoría
 
 Aplicación web para gestionar programas de incubación y aceleración: convocatorias, candidaturas, proyectos, itinerarios, mentorías, entregables, indicadores, documentos e informes.
 
-Aplicación publicada: [https://odissea-hub.pages.dev](https://odissea-hub.pages.dev)
+Aplicación publicada: [https://mentoria.pages.dev](https://mentoria.pages.dev)
 
 ## Estado
 
-La versión 0.4 está conectada a Supabase en producción. Incluye autenticación real, roles dinámicos por organización, recuperación de contraseña, RLS endurecida, auditoría automática y almacenamiento privado. Los módulos administrativos disponen de formularios y acciones reales para convocatorias, candidaturas, evaluaciones, cohortes, mentores, itinerarios, eventos, indicadores, documentos, informes, usuarios y configuración. La candidatura pública crea una sesión anónima segura, guarda el borrador y el adjunto en Supabase, bloquea la solicitud presentada y genera un número de registro desde PostgreSQL. Sin variables Supabase conserva un modo demo local para desarrollo y pruebas automatizadas.
+La versión 0.4, publicada con la marca Mentoría, está conectada a Supabase en producción. Incluye autenticación real, roles dinámicos por organización, recuperación de contraseña, RLS endurecida, auditoría automática y almacenamiento privado. Los módulos administrativos disponen de formularios y acciones reales para convocatorias, candidaturas, evaluaciones, cohortes, mentores, itinerarios, eventos, indicadores, documentos, informes, usuarios y configuración. La candidatura pública crea una sesión anónima segura, guarda el borrador y el adjunto en Supabase, bloquea la solicitud presentada y genera un número de registro `MEN`. Sin variables Supabase conserva un modo demo local para desarrollo y pruebas automatizadas.
 
 ## Requisitos
 

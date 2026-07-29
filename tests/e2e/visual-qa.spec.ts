@@ -10,7 +10,7 @@ test('captura dashboard y comprueba consola', async ({ page }, testInfo) => {
 
   await page.goto('/login')
   await page.getByRole('button', { name: 'Administración' }).click()
-  await page.getByRole('button', { name: /entrar en odissea hub/i }).click()
+  await page.getByRole('button', { name: /entrar en mentoría/i }).click()
   await expect(page.getByRole('heading', { name: /el programa, de un vistazo/i })).toBeVisible()
   await page.mouse.move(1, 1)
 

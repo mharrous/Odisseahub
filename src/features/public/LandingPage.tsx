@@ -19,7 +19,7 @@ export function LandingPage() {
           <div>
             <span className="eyebrow">Incubadora de Alta Tecnología</span>
             <h1>Una ruta clara para <em>proyectos que avanzan.</em></h1>
-            <p className="hero__lead">ODISSEA HUB conecta programas, talento y evidencias en un único espacio. Desde la candidatura hasta la consolidación empresarial.</p>
+            <p className="hero__lead">Mentoría conecta programas, talento y evidencias en un único espacio. Desde la candidatura hasta la consolidación empresarial.</p>
             <div className="hero__actions">
               <Link className="button button--primary" to="/convocatorias">Ver convocatoria <ArrowRight size={17} /></Link>
               <Link className="button button--secondary" to="/login">Entrar al espacio privado</Link>
@@ -29,7 +29,7 @@ export function LandingPage() {
             <div className="orbit" />
             <article className="hero-card hero-card--main">
               <div className="hero-card__top"><span className="eyebrow">Progreso global</span><ChartNoAxesCombined size={18} color="#1677FF" /></div>
-              <h3>Primera convocatoria ODISSEA</h3>
+              <h3>Primera convocatoria Mentoría</h3>
               <p>8 proyectos · Fase de incubación</p>
               <div className="progress-track" style={{ marginTop: 20 }}><span style={{ width: '56%' }} /></div>
               <div className="stat-line"><strong>56%</strong><span>+8% este mes</span></div>
