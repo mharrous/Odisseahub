@@ -6,7 +6,7 @@ Aplicación publicada: [https://odissea-hub.pages.dev](https://odissea-hub.pages
 
 ## Estado
 
-La versión 0.1 está publicada y conectada a Supabase en producción. Incluye autenticación real, roles por organización, recuperación de contraseña, RLS y almacenamiento privado. Sin variables Supabase conserva un modo demo local para desarrollo y pruebas.
+La versión 0.2 está conectada a Supabase en producción. Incluye autenticación real, roles por organización, recuperación de contraseña, RLS, almacenamiento privado y CRUD persistente para programas, módulos operativos y la ficha 360º de proyectos. Sin variables Supabase conserva un modo demo local para desarrollo y pruebas.
 
 ## Requisitos
 
@@ -72,6 +72,6 @@ Build: `npm run build`. Salida: `dist`. El repositorio incluye fallback SPA y ca
 
 ## Limitaciones actuales
 
-- Los módulos visuales de primera fase todavía usan datos de demostración; la sesión, el rol y las políticas de acceso ya son reales.
-- Correo, PDF/XLSX avanzado, calendario completo, comunidad y Copiloto requieren siguientes iteraciones.
+- Los módulos operativos de primera fase usan un registro flexible persistente; los formularios especializados de cada dominio requieren siguientes iteraciones.
+- Correo, PDF/XLSX avanzado, calendario con vista mensual, comunidad en tiempo real y Copiloto requieren siguientes iteraciones.
 - Los textos legales son marcadores y requieren validación jurídica.

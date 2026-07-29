@@ -41,3 +41,36 @@ test('Rutas privadas bloquean a un participante', async ({ page }) => {
   await page.goto('/admin/auditoria')
   await expect(page.getByRole('heading', { name: /no tienes permiso/i })).toBeVisible()
 })
+
+test('administración: buscador, ayuda, módulo editable y ficha 360', async ({ page }) => {
+  await page.goto('/login')
+  await page.getByRole('button', { name: 'Administración' }).click()
+  await page.getByRole('button', { name: /entrar en odissea hub/i }).click()
+
+  if ((page.viewportSize()?.width ?? 1440) >= 700) {
+    await page.getByLabel('Buscar en ODISSEA HUB').fill('eventos')
+    await page.getByRole('option', { name: /eventos/i }).click()
+    await expect(page.getByRole('heading', { name: 'Eventos' })).toBeVisible()
+    await page.getByRole('button', { name: 'Ayuda' }).click()
+    await expect(page.getByRole('heading', { name: 'Ayuda de ODISSEA HUB' })).toBeVisible()
+    await page.getByRole('button', { name: 'Cerrar', exact: true }).click()
+  }
+
+  await page.goto('/admin/eventos')
+  await page.getByRole('button', { name: 'Nuevo evento' }).click()
+  await page.getByLabel('Nombre *').fill('Evento funcional E2E')
+  await page.getByRole('button', { name: 'Guardar' }).click()
+  await expect(page.getByText('Evento funcional E2E')).toBeVisible()
+  await page.getByRole('button', { name: 'Editar' }).filter({ visible: true }).last().click()
+  await page.getByLabel('Nombre *').fill('Evento editado E2E')
+  await page.getByRole('button', { name: 'Guardar' }).click()
+  await expect(page.getByText('Evento editado E2E')).toBeVisible()
+
+  await page.goto('/admin/proyectos/p1')
+  await page.getByRole('tab', { name: 'Entregables' }).click()
+  await expect(page.getByText('Próximo entregable del proyecto')).toBeVisible()
+  await page.getByRole('button', { name: 'Añadir' }).click()
+  await page.getByLabel('Nombre *').fill('Entregable ficha E2E')
+  await page.getByRole('button', { name: 'Guardar' }).click()
+  await expect(page.getByText('Entregable ficha E2E')).toBeVisible()
+})

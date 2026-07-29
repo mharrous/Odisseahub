@@ -3,6 +3,7 @@ import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YA
 import { chartData } from '../../data/demo'
 import { PageHeader } from '../../components/layout/PageHeader'
 import { Button } from '../../components/ui/Button'
+import { useNavigate } from 'react-router-dom'
 
 const metrics = [
   { label: 'Proyectos activos', value: '8', change: '8 plazas cubiertas', icon: FolderKanban },
@@ -12,9 +13,10 @@ const metrics = [
 ]
 
 export function AdminDashboard() {
+  const navigate = useNavigate()
   return (
     <>
-      <PageHeader eyebrow="Martes, 28 de julio" title="El programa, de un vistazo" description="Sigue el avance de la primera convocatoria y atiende lo que necesita una decisión." action={<Button icon={<BriefcaseBusiness size={17} />}>Nuevo programa</Button>} />
+      <PageHeader eyebrow="Miércoles, 29 de julio" title="El programa, de un vistazo" description="Sigue el avance de la primera convocatoria y atiende lo que necesita una decisión." action={<Button onClick={() => navigate('/admin/programas?new=1')} icon={<BriefcaseBusiness size={17} />}>Nuevo programa</Button>} />
       <section className="metric-grid" aria-label="Indicadores principales">
         {metrics.map(({ label, value, change, icon: Icon }) => (
           <article className="metric-card" key={label}>
@@ -24,7 +26,7 @@ export function AdminDashboard() {
       </section>
       <div className="dashboard-grid">
         <section className="card">
-          <div className="card-head"><div><h2>Evolución del programa</h2><span className="muted" style={{ fontSize: '.7rem' }}>Progreso agregado frente al objetivo</span></div><select className="select" style={{ width: 140 }} aria-label="Periodo"><option>6 meses</option></select></div>
+          <div className="card-head"><div><h2>Evolución del programa</h2><span className="muted" style={{ fontSize: '.7rem' }}>Progreso agregado frente al objetivo</span></div><span className="badge badge--neutral">Últimos 6 meses</span></div>
           <div className="chart-wrap" aria-label="Gráfico: el progreso aumenta del 18 al 56 por ciento entre febrero y julio">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={chartData} margin={{ left: -22, right: 10, top: 10 }}>
@@ -51,7 +53,7 @@ export function AdminDashboard() {
       </div>
       <div className="dashboard-grid dashboard-grid--split">
         <section className="card">
-          <div className="card-head"><h2>Actividad reciente</h2><Button variant="ghost" size="sm">Ver todo</Button></div>
+          <div className="card-head"><h2>Actividad reciente</h2><Button variant="ghost" size="sm" onClick={() => navigate('/admin/auditoria')}>Ver todo</Button></div>
           <div className="activity-list">
             <div className="activity-row"><span className="avatar" style={{ background: '#e6f7f3', color: '#087769' }}><CheckCircle2 size={16} /></span><div><p><strong>Abyla Robotics</strong> presentó “Validación técnica v2”</p><time>Hace 32 minutos</time></div></div>
             <div className="activity-row"><span className="avatar">LR</span><div><p><strong>Lucía Romero</strong> registró 2 horas de mentoría</p><time>Hace 2 horas</time></div></div>
@@ -59,7 +61,7 @@ export function AdminDashboard() {
           </div>
         </section>
         <section className="card">
-          <div className="card-head"><h2>Próximos hitos</h2><Button variant="ghost" size="sm">Calendario</Button></div>
+          <div className="card-head"><h2>Próximos hitos</h2><Button variant="ghost" size="sm" onClick={() => navigate('/admin/eventos')}>Calendario</Button></div>
           <div className="milestone-list">
             <div className="milestone"><span className="milestone__dot" /><div><strong>Taller de estrategia comercial</strong><p>30 jul · 10:00 · Espacio ODISSEA</p></div></div>
             <div className="milestone"><span className="milestone__dot" /><div><strong>Cierre del entregable financiero</strong><p>2 ago · 4 proyectos pendientes</p></div></div>

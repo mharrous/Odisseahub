@@ -1,11 +1,13 @@
 import {
   Bell, BookOpen, BriefcaseBusiness, CalendarDays, ChartNoAxesCombined, ClipboardCheck,
   FileStack, Gauge, GraduationCap, LayoutDashboard, Menu, MessageSquareText, Search,
-  Settings, ShieldCheck, Users, X, FolderKanban, Route, Home, UserRound,
+  Settings, ShieldCheck, Users, X, FolderKanban, Route, Home, UserRound, ExternalLink,
 } from 'lucide-react'
-import { useState } from 'react'
+import type { LucideIcon } from 'lucide-react'
+import { useMemo, useState, type FormEvent } from 'react'
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import { Brand } from '../Brand'
+import { Modal } from '../ui/Modal'
 import { useAuth } from '../../features/auth/AuthContext'
 import { roleLabels } from '../../data/demo'
 import { isSupabaseConfigured } from '../../lib/supabase'
@@ -64,15 +66,36 @@ const evaluatorNav = [
   ]],
 ] as const
 
+type NavItem = readonly [path: string, label: string, icon: LucideIcon]
+type NavSection = readonly [section: string, links: readonly NavItem[]]
+
 export function AppLayout() {
   const [menuOpen, setMenuOpen] = useState(false)
+  const [helpOpen, setHelpOpen] = useState(false)
+  const [notificationsOpen, setNotificationsOpen] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
   const { role, logout } = useAuth()
   const navigate = useNavigate()
-  const nav = role === 'participant' ? participantNav : role === 'mentor' ? mentorNav : role === 'evaluator' ? evaluatorNav : adminNav
+  const nav: readonly NavSection[] = role === 'participant' ? participantNav : role === 'mentor' ? mentorNav : role === 'evaluator' ? evaluatorNav : adminNav
+  const searchResults = useMemo(() => {
+    const value = searchQuery.trim().toLowerCase()
+    if (value.length < 2) return []
+    return nav.flatMap(([, links]) => links)
+      .filter(([, label]) => label.toLowerCase().includes(value))
+      .slice(0, 6)
+  }, [nav, searchQuery])
 
   const handleLogout = async () => {
     await logout()
     navigate('/login')
+  }
+
+  const submitSearch = (event: FormEvent) => {
+    event.preventDefault()
+    if (searchResults[0]) {
+      navigate(searchResults[0][0])
+      setSearchQuery('')
+    }
   }
 
   return (
@@ -101,14 +124,21 @@ export function AppLayout() {
           <button className="icon-button mobile-menu" onClick={() => setMenuOpen((value) => !value)} aria-label={menuOpen ? 'Cerrar menú' : 'Abrir menú'}>
             {menuOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
-          <div className="search">
+          <form className="search" onSubmit={submitSearch}>
             <Search size={18} aria-hidden="true" />
-            <input aria-label="Buscar en ODISSEA HUB" placeholder="Buscar proyectos, personas o documentos..." />
-          </div>
+            <input value={searchQuery} onChange={(event) => setSearchQuery(event.target.value)} aria-label="Buscar en ODISSEA HUB" placeholder="Buscar una sección..." autoComplete="off" />
+            {searchQuery.trim().length >= 2 && (
+              <div className="global-search-results" role="listbox" aria-label="Resultados de búsqueda">
+                {searchResults.length ? searchResults.map(([path, label, Icon]) => (
+                  <button type="button" role="option" aria-selected="false" key={path} onClick={() => { navigate(path); setSearchQuery('') }}><Icon size={17} /><span>{label}</span><ExternalLink size={14} /></button>
+                )) : <p>No hay secciones que coincidan.</p>}
+              </div>
+            )}
+          </form>
           <span className="environment-pill">{isSupabaseConfigured ? 'Supabase conectado' : 'Modo demostración'}</span>
           <div className="topbar__right">
-            <button className="icon-button" aria-label="Ayuda"><GraduationCap size={19} /></button>
-            <button className="icon-button" aria-label="Notificaciones"><Bell size={19} /></button>
+            <button className="icon-button" aria-label="Ayuda" onClick={() => setHelpOpen(true)}><GraduationCap size={19} /></button>
+            <button className="icon-button notification-button" aria-label="Notificaciones" onClick={() => setNotificationsOpen(true)}><Bell size={19} /><span className="notification-dot" aria-hidden="true" /></button>
           </div>
         </header>
         <main id="main-content" className="content">
@@ -123,6 +153,19 @@ export function AppLayout() {
           </nav>
         )}
       </div>
+      <Modal title="Ayuda de ODISSEA HUB" open={helpOpen} onClose={() => setHelpOpen(false)}>
+        <div className="help-list">
+          <section><strong>Navegación</strong><p>Usa el menú lateral para acceder a las áreas disponibles según tu rol.</p></section>
+          <section><strong>Datos y permisos</strong><p>Los cambios se guardan en Supabase y solo son visibles para los miembros autorizados de tu organización.</p></section>
+          <section><strong>Soporte</strong><p>Si una acción devuelve un error, copia el mensaje mostrado en pantalla y comunícalo al equipo administrador.</p></section>
+        </div>
+      </Modal>
+      <Modal title="Notificaciones" open={notificationsOpen} onClose={() => setNotificationsOpen(false)}>
+        <div className="notification-list">
+          <button onClick={() => { navigate(role === 'admin' ? '/admin/eventos' : role === 'participant' ? '/app/calendario' : role === 'mentor' ? '/mentor/calendario' : '/evaluador/evaluaciones'); setNotificationsOpen(false) }}><CalendarDays size={18} /><span><strong>Próximo seguimiento</strong><small>Consulta las próximas fechas y sesiones.</small></span></button>
+          <button onClick={() => { navigate(role === 'admin' ? '/admin/documentos' : role === 'participant' ? '/app/documentos' : role === 'mentor' ? '/mentor/entregables' : '/evaluador/candidaturas'); setNotificationsOpen(false) }}><ClipboardCheck size={18} /><span><strong>Trabajo pendiente</strong><small>Hay elementos que requieren revisión.</small></span></button>
+        </div>
+      </Modal>
     </div>
   )
 }

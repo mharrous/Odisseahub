@@ -26,6 +26,18 @@ export interface Project {
   hours: number
 }
 
+export interface WorkspaceItem {
+  id: string
+  kind: string
+  title: string
+  description: string
+  status: 'Disponible' | 'En curso' | 'Completado' | 'Archivado'
+  owner: string
+  dueDate?: string
+  projectId?: string
+  updatedAt: string
+}
+
 export interface ApplicationDraft {
   projectName: string
   contactName: string

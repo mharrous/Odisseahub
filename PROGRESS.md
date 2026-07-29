@@ -7,9 +7,12 @@
 - Sistema de diseño responsive, accesible y con tokens centralizados.
 - Navegación pública y privada por roles demo.
 - Dashboard de administración con métricas, alertas y gráficos.
-- Gestión local persistente de programas en modo demo.
+- Gestión persistente de programas con ciclo de vida completo y fallback demo.
 - Candidatura pública con borrador, adjunto, envío y resguardo.
-- Listado de proyectos y ficha 360º.
+- Listado filtrable de proyectos y ficha 360º con nueve pestañas operativas y CRUD persistente.
+- Buscador global, ayuda, notificaciones y accesos directos funcionales.
+- CRUD persistente para módulos operativos mediante `workspace_items` con RLS.
+- Auditoría funcional autenticada y pruebas E2E ampliadas en escritorio y móvil.
 - Vistas iniciales de participante, mentor y evaluador.
 - Migración inicial multi-organización con RLS y auditoría.
 - Seed de demostración no personal.
@@ -22,7 +25,7 @@
 
 ## En curso
 
-- Sustitución progresiva de datos demo de los módulos por repositorios Supabase.
+- Evolución de los formularios genéricos a flujos especializados por dominio.
 - Ampliación de formularios configurables y constructor drag and drop.
 
 ## Pendiente

@@ -3,6 +3,7 @@ import { PageHeader } from '../../components/layout/PageHeader'
 import { ProgressBar } from '../../components/ui/ProgressBar'
 import { projects } from '../../data/demo'
 import { useAuth } from '../auth/AuthContext'
+import { useNavigate } from 'react-router-dom'
 
 const copy = {
   participant: { eyebrow: 'Mi espacio', title: 'Buenos días, Nora', description: 'Tu siguiente paso está claro. Continúa donde lo dejaste.' },
@@ -19,6 +20,7 @@ export function RoleDashboard() {
 }
 
 function ParticipantDashboard({ eyebrow, title, description }: typeof copy.participant) {
+  const navigate = useNavigate()
   return (
     <>
       <PageHeader eyebrow={eyebrow} title={title} description={description} />
@@ -29,7 +31,7 @@ function ParticipantDashboard({ eyebrow, title, description }: typeof copy.parti
         <ProgressBar value={74} label="Progreso del itinerario" />
       </section>
       <div className="dashboard-grid">
-        <section className="card"><div className="card-head"><h2>Tu próximo paso</h2><Route size={19} color="#1677FF" /></div><span className="badge badge--warning">Vence en 5 días</span><h3 style={{ marginTop: 14 }}>Entregable · Validación de mercado</h3><p className="muted" style={{ fontSize: '.8rem', lineHeight: 1.6 }}>Incorpora las conclusiones de las entrevistas y adjunta la matriz de evidencias.</p><button className="button button--primary">Continuar entregable</button></section>
+        <section className="card"><div className="card-head"><h2>Tu próximo paso</h2><Route size={19} color="#1677FF" /></div><span className="badge badge--warning">Vence en 5 días</span><h3 style={{ marginTop: 14 }}>Entregable · Validación de mercado</h3><p className="muted" style={{ fontSize: '.8rem', lineHeight: 1.6 }}>Incorpora las conclusiones de las entrevistas y adjunta la matriz de evidencias.</p><button className="button button--primary" onClick={() => navigate('/app/entregables')}>Continuar entregable</button></section>
         <aside className="card"><div className="card-head"><h2>Próxima mentoría</h2><CalendarDays size={19} color="#13B8A6" /></div><h3>Revisión del modelo comercial</h3><p className="muted" style={{ fontSize: '.75rem' }}>4 agosto · 10:30 · Online</p><p><strong>Lucía Romero</strong><br/><span className="muted" style={{ fontSize: '.7rem' }}>Mentora principal</span></p></aside>
       </div>
       <div className="metric-grid" style={{ marginTop: 18 }}>
@@ -42,6 +44,7 @@ function ParticipantDashboard({ eyebrow, title, description }: typeof copy.parti
 
 function MentorDashboard({ eyebrow, title, description }: { eyebrow: string; title: string; description: string }) {
   const assigned = projects.filter((project) => project.mentor === 'Lucía Romero')
+  const navigate = useNavigate()
   return (
     <>
       <PageHeader eyebrow={eyebrow} title={title} description={description} />
@@ -53,13 +56,14 @@ function MentorDashboard({ eyebrow, title, description }: { eyebrow: string; tit
       </section>
       <section className="card" style={{ marginTop: 18 }}>
         <div className="card-head"><h2>Proyectos asignados</h2><Users size={18} color="#1677FF" /></div>
-        <div className="milestone-list">{assigned.map((project) => <div className="milestone" key={project.id}><span className="project-logo" style={{ width: 39, height: 39, fontSize: '.7rem', background: '#eef5ff' }}>{project.name.slice(0,2).toUpperCase()}</span><div style={{ flex: 1 }}><strong>{project.name}</strong><p>{project.nextMilestone} · {project.progress}% de progreso</p></div></div>)}</div>
+        <div className="milestone-list">{assigned.map((project) => <button className="milestone milestone--button" key={project.id} onClick={() => navigate(`/mentor/proyectos/${project.id}`)}><span className="project-logo" style={{ width: 39, height: 39, fontSize: '.7rem', background: '#eef5ff' }}>{project.name.slice(0,2).toUpperCase()}</span><div style={{ flex: 1 }}><strong>{project.name}</strong><p>{project.nextMilestone} · {project.progress}% de progreso</p></div></button>)}</div>
       </section>
     </>
   )
 }
 
 function EvaluatorDashboard({ eyebrow, title, description }: typeof copy.evaluator) {
+  const navigate = useNavigate()
   return (
     <>
       <PageHeader eyebrow={eyebrow} title={title} description={description} />
@@ -71,7 +75,7 @@ function EvaluatorDashboard({ eyebrow, title, description }: typeof copy.evaluat
       <section className="card" style={{ marginTop: 18 }}>
         <div className="card-head"><h2>Candidaturas asignadas</h2><span className="badge badge--info">Rúbrica ODISSEA</span></div>
         <div className="milestone-list">
-          {['ODI-2026-0012 · HydroSense', 'ODI-2026-0015 · Gadir Cloud', 'ODI-2026-0018 · BioMarine Labs'].map((item, index) => <div className="milestone" key={item}><span className="milestone__dot" style={{ background: index < 1 ? '#13b8a6' : '#b7c1cd' }} /><div><strong>{item}</strong><p>{index < 1 ? 'Evaluación finalizada · 82 puntos' : 'Pendiente de evaluación'}</p></div></div>)}
+          {['ODI-2026-0012 · HydroSense', 'ODI-2026-0015 · Gadir Cloud', 'ODI-2026-0018 · BioMarine Labs'].map((item, index) => <button className="milestone milestone--button" key={item} onClick={() => navigate('/evaluador/candidaturas')}><span className="milestone__dot" style={{ background: index < 1 ? '#13b8a6' : '#b7c1cd' }} /><div><strong>{item}</strong><p>{index < 1 ? 'Evaluación finalizada · 82 puntos' : 'Pendiente de evaluación'}</p></div></button>)}
         </div>
       </section>
     </>
