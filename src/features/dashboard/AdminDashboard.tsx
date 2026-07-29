@@ -1,22 +1,51 @@
-import { AlertTriangle, ArrowUpRight, BriefcaseBusiness, CalendarDays, CheckCircle2, Clock3, FileWarning, FolderKanban } from 'lucide-react'
-import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
-import { chartData } from '../../data/demo'
+import { useEffect, useMemo, useState } from 'react'
+import { AlertTriangle, BriefcaseBusiness, CalendarDays, Clock3, FileWarning, FolderKanban, Gauge } from 'lucide-react'
+import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
+import { useNavigate } from 'react-router-dom'
 import { PageHeader } from '../../components/layout/PageHeader'
 import { Button } from '../../components/ui/Button'
-import { useNavigate } from 'react-router-dom'
-
-const metrics = [
-  { label: 'Proyectos activos', value: '8', change: '8 plazas cubiertas', icon: FolderKanban },
-  { label: 'Progreso medio', value: '61%', change: '+7% desde junio', icon: ArrowUpRight },
-  { label: 'Horas de mentoría', value: '133 h', change: '24 h este mes', icon: Clock3 },
-  { label: 'Entregables pendientes', value: '12', change: '4 requieren revisión', icon: FileWarning },
-]
+import { EmptyState } from '../../components/ui/EmptyState'
+import { getAdminDashboard, listProjects } from '../../lib/repository'
+import type { DashboardSummary, Project } from '../../types/domain'
 
 export function AdminDashboard() {
   const navigate = useNavigate()
+  const [summary, setSummary] = useState<DashboardSummary | null>(null)
+  const [projects, setProjects] = useState<Project[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
+
+  useEffect(() => {
+    let active = true
+    Promise.all([getAdminDashboard(), listProjects()])
+      .then(([summaryData, projectData]) => {
+        if (!active) return
+        setSummary(summaryData)
+        setProjects(projectData)
+      })
+      .catch((loadError) => active && setError(loadError instanceof Error ? loadError.message : 'No se ha podido cargar el panel.'))
+      .finally(() => active && setLoading(false))
+    return () => { active = false }
+  }, [])
+
+  const chartRows = useMemo(() => projects.map((project) => ({
+    name: project.name.length > 14 ? `${project.name.slice(0, 12)}…` : project.name,
+    progreso: project.progress,
+  })), [projects])
+
+  if (loading) return <div className="empty-state"><p>Cargando indicadores reales…</p></div>
+
+  const metrics = [
+    { label: 'Proyectos activos', value: String(summary?.activeProjects ?? 0), change: 'Proyectos visibles para tu rol', icon: FolderKanban },
+    { label: 'Progreso medio', value: `${summary?.averageProgress ?? 0}%`, change: 'Media calculada en tiempo real', icon: Gauge },
+    { label: 'Horas de mentoría', value: `${summary?.mentorHours ?? 0} h`, change: 'Sesiones con horas registradas', icon: Clock3 },
+    { label: 'Entregables pendientes', value: String(summary?.pendingDeliverables ?? 0), change: 'En revisión o con cambios', icon: FileWarning },
+  ]
+
   return (
     <>
-      <PageHeader eyebrow="Miércoles, 29 de julio" title="El programa, de un vistazo" description="Sigue el avance de la primera convocatoria y atiende lo que necesita una decisión." action={<Button onClick={() => navigate('/admin/programas?new=1')} icon={<BriefcaseBusiness size={17} />}>Nuevo programa</Button>} />
+      <PageHeader eyebrow={new Date().toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' })} title="El programa, de un vistazo" description="Datos actuales de proyectos, entregables, mentorías y próximos eventos." action={<Button onClick={() => navigate('/admin/programas?new=1')} icon={<BriefcaseBusiness size={17} />}>Nuevo programa</Button>} />
+      {error && <div className="notice notice--danger" role="alert">{error}</div>}
       <section className="metric-grid" aria-label="Indicadores principales">
         {metrics.map(({ label, value, change, icon: Icon }) => (
           <article className="metric-card" key={label}>
@@ -26,46 +55,45 @@ export function AdminDashboard() {
       </section>
       <div className="dashboard-grid">
         <section className="card">
-          <div className="card-head"><div><h2>Evolución del programa</h2><span className="muted" style={{ fontSize: '.7rem' }}>Progreso agregado frente al objetivo</span></div><span className="badge badge--neutral">Últimos 6 meses</span></div>
-          <div className="chart-wrap" aria-label="Gráfico: el progreso aumenta del 18 al 56 por ciento entre febrero y julio">
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={chartData} margin={{ left: -22, right: 10, top: 10 }}>
-                <defs><linearGradient id="progressFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1677FF" stopOpacity={0.25}/><stop offset="100%" stopColor="#1677FF" stopOpacity={0}/></linearGradient></defs>
-                <CartesianGrid stroke="#e8edf3" strokeDasharray="4 4" vertical={false} />
-                <XAxis dataKey="month" tick={{ fontSize: 11, fill: '#667085' }} axisLine={false} tickLine={false} />
-                <YAxis tick={{ fontSize: 11, fill: '#667085' }} axisLine={false} tickLine={false} domain={[0, 70]} />
-                <Tooltip contentStyle={{ borderRadius: 12, border: '1px solid #e4e9f0', boxShadow: '0 10px 30px rgba(0,0,0,.08)' }} />
-                <Area isAnimationActive={false} type="monotone" dataKey="objetivo" stroke="#b7c1cd" fill="none" strokeDasharray="5 5" strokeWidth={2} />
-                <Area isAnimationActive={false} type="monotone" dataKey="progreso" stroke="#1677FF" fill="url(#progressFill)" strokeWidth={3} />
-              </AreaChart>
-            </ResponsiveContainer>
-          </div>
-          <table style={{ position: 'absolute', width: 1, height: 1, overflow: 'hidden', clip: 'rect(0 0 0 0)' }}><caption>Datos equivalentes del gráfico</caption><tbody>{chartData.map((row) => <tr key={row.month}><th>{row.month}</th><td>{row.progreso}%</td><td>{row.objetivo}% objetivo</td></tr>)}</tbody></table>
+          <div className="card-head"><div><h2>Progreso por proyecto</h2><span className="muted dashboard-caption">Porcentaje registrado actualmente en Supabase</span></div><span className="badge badge--neutral">{projects.length} proyectos</span></div>
+          {chartRows.length ? (
+            <div className="chart-wrap" aria-label="Gráfico de progreso actual por proyecto">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={chartRows} margin={{ left: -22, right: 10, top: 10 }}>
+                  <CartesianGrid stroke="#e8edf3" strokeDasharray="4 4" vertical={false} />
+                  <XAxis dataKey="name" tick={{ fontSize: 10, fill: '#667085' }} axisLine={false} tickLine={false} />
+                  <YAxis tick={{ fontSize: 11, fill: '#667085' }} axisLine={false} tickLine={false} domain={[0, 100]} />
+                  <Tooltip contentStyle={{ borderRadius: 12, border: '1px solid #e4e9f0' }} />
+                  <Bar dataKey="progreso" fill="#1677FF" radius={[6, 6, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          ) : <EmptyState title="Sin proyectos" description="Los proyectos aparecerán aquí cuando se incorporen al programa." />}
         </section>
         <aside className="card">
-          <div className="card-head"><h2>Necesita atención</h2><span className="badge badge--danger">3 alertas</span></div>
+          <div className="card-head"><h2>Necesita atención</h2><span className="badge badge--danger">{summary?.atRiskProjects.length ?? 0} alertas</span></div>
           <div className="alert-list">
-            <div className="alert-item"><span className="alert-item__icon"><AlertTriangle size={16} /></span><div><strong>2 proyectos sin actividad</strong><p>Ceuta Biolab y Orilla Health llevan más de 10 días sin registrar avance.</p></div></div>
-            <div className="alert-item"><span className="alert-item__icon"><FileWarning size={16} /></span><div><strong>4 entregables por revisar</strong><p>Dos de ellos vencen en las próximas 48 horas.</p></div></div>
-            <div className="alert-item"><span className="alert-item__icon"><CalendarDays size={16} /></span><div><strong>1 acta pendiente</strong><p>La sesión de Nauta AI del 24 de julio no tiene acta.</p></div></div>
+            {summary?.atRiskProjects.length ? summary.atRiskProjects.map((project) => (
+              <button className="alert-item alert-item--button" key={project.id} onClick={() => navigate(`/admin/proyectos/${project.id}`)}><span className="alert-item__icon"><AlertTriangle size={16} /></span><div><strong>{project.name}</strong><p>Proyecto marcado en riesgo · {project.progress}% de progreso.</p></div></button>
+            )) : <p className="muted">No hay proyectos marcados en riesgo.</p>}
           </div>
         </aside>
       </div>
       <div className="dashboard-grid dashboard-grid--split">
         <section className="card">
-          <div className="card-head"><h2>Actividad reciente</h2><Button variant="ghost" size="sm" onClick={() => navigate('/admin/auditoria')}>Ver todo</Button></div>
+          <div className="card-head"><h2>Actividad reciente</h2><Button variant="ghost" size="sm" onClick={() => navigate('/admin/auditoria')}>Ver auditoría</Button></div>
           <div className="activity-list">
-            <div className="activity-row"><span className="avatar" style={{ background: '#e6f7f3', color: '#087769' }}><CheckCircle2 size={16} /></span><div><p><strong>Abyla Robotics</strong> presentó “Validación técnica v2”</p><time>Hace 32 minutos</time></div></div>
-            <div className="activity-row"><span className="avatar">LR</span><div><p><strong>Lucía Romero</strong> registró 2 horas de mentoría</p><time>Hace 2 horas</time></div></div>
-            <div className="activity-row"><span className="avatar" style={{ background: '#eef5ff', color: '#1677ff' }}>NA</span><div><p><strong>Nauta AI</strong> completó el módulo de mercado</p><time>Ayer, 18:42</time></div></div>
+            {summary?.recentActivity.length ? summary.recentActivity.map((activity) => (
+              <div className="activity-row" key={activity.id}><span className="avatar">{activity.title.slice(0, 2).toUpperCase()}</span><div><p><strong>{activity.title}</strong> · {activity.detail}</p><time>{new Date(activity.createdAt).toLocaleString('es-ES')}</time></div></div>
+            )) : <p className="muted">Todavía no hay actividad auditada.</p>}
           </div>
         </section>
         <section className="card">
-          <div className="card-head"><h2>Próximos hitos</h2><Button variant="ghost" size="sm" onClick={() => navigate('/admin/eventos')}>Calendario</Button></div>
+          <div className="card-head"><h2>Próximos eventos</h2><Button variant="ghost" size="sm" onClick={() => navigate('/admin/eventos')}>Calendario</Button></div>
           <div className="milestone-list">
-            <div className="milestone"><span className="milestone__dot" /><div><strong>Taller de estrategia comercial</strong><p>30 jul · 10:00 · Espacio ODISSEA</p></div></div>
-            <div className="milestone"><span className="milestone__dot" /><div><strong>Cierre del entregable financiero</strong><p>2 ago · 4 proyectos pendientes</p></div></div>
-            <div className="milestone"><span className="milestone__dot" /><div><strong>Comité mensual de seguimiento</strong><p>6 ago · 09:30 · Sesión online</p></div></div>
+            {summary?.upcomingEvents.length ? summary.upcomingEvents.map((event) => (
+              <div className="milestone" key={event.id}><span className="milestone__dot" /><div><strong>{event.title}</strong><p><CalendarDays size={13} /> {new Date(event.startsAt).toLocaleString('es-ES')} · {event.location}</p></div></div>
+            )) : <p className="muted">No hay eventos próximos.</p>}
           </div>
         </section>
       </div>

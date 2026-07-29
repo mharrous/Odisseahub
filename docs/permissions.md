@@ -13,3 +13,13 @@
 | Auditoría y permisos | Sí | No | No | No | No |
 
 La interfaz aplica guardas por rol. PostgreSQL aplica RLS por organización, proyecto, asignación y usuario. Los permisos del esquema son configurables mediante `roles`, `permissions` y `role_permissions`.
+
+## Reglas adicionales
+
+- Una persona solicitante anónima solo lee y modifica su propio borrador.
+- La presentación exige convocatoria abierta, datos completos y al menos un documento; después fija registro, fecha y bloqueo.
+- El adjunto presentado no puede borrarse desde Storage por su titular.
+- Un evaluador solo lee candidaturas y archivos de asignaciones propias.
+- Un mentor solo accede a proyectos asignados.
+- `workspace_items` no permite cambiar su organización, proyecto, autor o tipo para eludir las políticas.
+- Los coordinadores reciben permisos operativos de programas, convocatorias, candidaturas, evaluaciones, proyectos y documentos; la gestión de usuarios y auditoría sigue reservada al administrador.

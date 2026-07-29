@@ -45,6 +45,17 @@
 .notification-list button:hover { border-color: var(--blue-600); background: var(--surface-blue); }
 .notification-list span { display: grid; gap: 3px; }
 .notification-list small, .project-section-copy { color: var(--muted); font-size: .72rem; }
+.notification-list .is-unread { border-color: var(--blue-600); background: var(--surface-blue); }
+.dashboard-caption, .card-caption { color: var(--muted); font-size: .72rem; }
+.dashboard-section { margin-top: 18px; }
+.project-eyebrow { color: #65d8ca; }
+.project-progress-title { font-size: 1.6rem; margin: 9px 0; }
+.card-spaced-title { margin-top: 14px; }
+.card-copy { font-size: .8rem; line-height: 1.6; }
+.project-logo--small { width: 39px; height: 39px; font-size: .7rem; background: #eef5ff; }
+.milestone-content { flex: 1; }
+.alert-item--button { width: 100%; border: 0; cursor: pointer; text-align: left; }
+.alert-item--button:hover { background: #fff7f6; }
 .project-item-list { display: grid; gap: 10px; }
 .project-item { display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 15px; border: 1px solid var(--line); border-radius: 12px; }
 .project-item p { margin: 4px 0; color: var(--muted); font-size: .78rem; }

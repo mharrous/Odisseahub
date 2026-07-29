@@ -4,13 +4,15 @@ import {
   Settings, ShieldCheck, Users, X, FolderKanban, Route, Home, UserRound, ExternalLink,
 } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
-import { useMemo, useState, type FormEvent } from 'react'
+import { useEffect, useMemo, useState, type FormEvent } from 'react'
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import { Brand } from '../Brand'
 import { Modal } from '../ui/Modal'
 import { useAuth } from '../../features/auth/AuthContext'
 import { roleLabels } from '../../data/demo'
 import { isSupabaseConfigured } from '../../lib/supabase'
+import { getCurrentProfile, listNotifications, markNotificationRead } from '../../lib/repository'
+import type { AppNotification, UserProfile } from '../../types/domain'
 
 const adminNav = [
   ['Principal', [
@@ -47,6 +49,24 @@ const participantNav = [
   ]],
 ] as const
 
+const coordinatorNav = [
+  ['Principal', [
+    ['/admin', 'Resumen', LayoutDashboard],
+    ['/admin/programas', 'Programas', BriefcaseBusiness],
+    ['/admin/convocatorias', 'Convocatorias', ClipboardCheck],
+    ['/admin/candidaturas', 'Candidaturas', FileStack],
+    ['/admin/proyectos', 'Proyectos', FolderKanban],
+  ]],
+  ['Seguimiento', [
+    ['/admin/itinerarios', 'Itinerarios', Route],
+    ['/admin/mentores', 'Mentores', Users],
+    ['/admin/eventos', 'Eventos', CalendarDays],
+    ['/admin/indicadores', 'Indicadores', ChartNoAxesCombined],
+    ['/admin/documentos', 'Documentos', BookOpen],
+    ['/admin/informes', 'Informes', Gauge],
+  ]],
+] as const
+
 const mentorNav = [
   ['Mentoría', [
     ['/mentor', 'Resumen', LayoutDashboard],
@@ -74,9 +94,11 @@ export function AppLayout() {
   const [helpOpen, setHelpOpen] = useState(false)
   const [notificationsOpen, setNotificationsOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
+  const [profile, setProfile] = useState<UserProfile | null>(null)
+  const [notifications, setNotifications] = useState<AppNotification[]>([])
   const { role, logout } = useAuth()
   const navigate = useNavigate()
-  const nav: readonly NavSection[] = role === 'participant' ? participantNav : role === 'mentor' ? mentorNav : role === 'evaluator' ? evaluatorNav : adminNav
+  const nav: readonly NavSection[] = role === 'participant' ? participantNav : role === 'mentor' ? mentorNav : role === 'evaluator' ? evaluatorNav : role === 'coordinator' ? coordinatorNav : adminNav
   const searchResults = useMemo(() => {
     const value = searchQuery.trim().toLowerCase()
     if (value.length < 2) return []
@@ -84,6 +106,24 @@ export function AppLayout() {
       .filter(([, label]) => label.toLowerCase().includes(value))
       .slice(0, 6)
   }, [nav, searchQuery])
+  const unreadCount = notifications.filter((item) => !item.readAt).length
+  const initials = (profile?.displayName ?? roleLabels[role ?? 'admin'])
+    .split(/\s+/)
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase())
+    .join('')
+
+  useEffect(() => {
+    let active = true
+    Promise.all([getCurrentProfile(), listNotifications()])
+      .then(([profileData, notificationData]) => {
+        if (!active) return
+        setProfile(profileData)
+        setNotifications(notificationData)
+      })
+      .catch(() => undefined)
+    return () => { active = false }
+  }, [])
 
   const handleLogout = async () => {
     await logout()
@@ -115,8 +155,8 @@ export function AppLayout() {
           ))}
         </nav>
         <button className="sidebar__footer" onClick={handleLogout} style={{ borderInline: 0, borderBottom: 0, background: 'transparent', color: 'white', textAlign: 'left', cursor: 'pointer' }}>
-          <span className="avatar">MC</span>
-          <span><strong>María Campos</strong><small>{role ? roleLabels[role] : 'Usuario'} · Cerrar sesión</small></span>
+          <span className="avatar">{initials || 'OD'}</span>
+          <span><strong>{profile?.displayName ?? 'Usuario ODISSEA'}</strong><small>{role ? roleLabels[role] : 'Usuario'} · Cerrar sesión</small></span>
         </button>
       </aside>
       <div className="main-wrap">
@@ -138,7 +178,7 @@ export function AppLayout() {
           <span className="environment-pill">{isSupabaseConfigured ? 'Supabase conectado' : 'Modo demostración'}</span>
           <div className="topbar__right">
             <button className="icon-button" aria-label="Ayuda" onClick={() => setHelpOpen(true)}><GraduationCap size={19} /></button>
-            <button className="icon-button notification-button" aria-label="Notificaciones" onClick={() => setNotificationsOpen(true)}><Bell size={19} /><span className="notification-dot" aria-hidden="true" /></button>
+            <button className="icon-button notification-button" aria-label={`Notificaciones${unreadCount ? `, ${unreadCount} sin leer` : ''}`} onClick={() => setNotificationsOpen(true)}><Bell size={19} />{unreadCount > 0 && <span className="notification-dot" aria-hidden="true" />}</button>
           </div>
         </header>
         <main id="main-content" className="content">
@@ -162,8 +202,18 @@ export function AppLayout() {
       </Modal>
       <Modal title="Notificaciones" open={notificationsOpen} onClose={() => setNotificationsOpen(false)}>
         <div className="notification-list">
-          <button onClick={() => { navigate(role === 'admin' ? '/admin/eventos' : role === 'participant' ? '/app/calendario' : role === 'mentor' ? '/mentor/calendario' : '/evaluador/evaluaciones'); setNotificationsOpen(false) }}><CalendarDays size={18} /><span><strong>Próximo seguimiento</strong><small>Consulta las próximas fechas y sesiones.</small></span></button>
-          <button onClick={() => { navigate(role === 'admin' ? '/admin/documentos' : role === 'participant' ? '/app/documentos' : role === 'mentor' ? '/mentor/entregables' : '/evaluador/candidaturas'); setNotificationsOpen(false) }}><ClipboardCheck size={18} /><span><strong>Trabajo pendiente</strong><small>Hay elementos que requieren revisión.</small></span></button>
+          {notifications.length ? notifications.map((notification) => (
+            <button key={notification.id} className={notification.readAt ? '' : 'is-unread'} onClick={async () => {
+              if (!notification.readAt) {
+                await markNotificationRead(notification.id)
+                setNotifications((current) => current.map((item) => item.id === notification.id ? { ...item, readAt: new Date().toISOString() } : item))
+              }
+              if (notification.actionUrl) navigate(notification.actionUrl)
+              setNotificationsOpen(false)
+            }}>
+              <Bell size={18} /><span><strong>{notification.title}</strong><small>{notification.body || new Date(notification.createdAt).toLocaleString('es-ES')}</small></span>
+            </button>
+          )) : <p className="muted">No tienes notificaciones pendientes.</p>}
         </div>
       </Modal>
     </div>

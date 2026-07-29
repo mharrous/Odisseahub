@@ -3,8 +3,8 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState, t
 import type { Role } from '../../types/domain'
 import { loadLocal, saveLocal } from '../../lib/storage'
 import { isSupabaseConfigured, supabase } from '../../lib/supabase'
+import { clearTenantCache } from '../../lib/tenant'
 
-const ODISSEA_ORGANIZATION_ID = '10000000-0000-0000-0000-000000000001'
 const validRoles: Role[] = ['admin', 'coordinator', 'mentor', 'participant', 'evaluator']
 const remoteRoleAliases: Record<string, Role> = {
   organization_admin: 'admin',
@@ -22,6 +22,7 @@ interface LoginCredentials {
 
 interface AuthState {
   role: Role | null
+  organizationId: string | null
   loading: boolean
   login: (credentials: LoginCredentials) => Promise<Role>
   logout: () => Promise<void>
@@ -33,17 +34,28 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [role, setRole] = useState<Role | null>(() => (
     isSupabaseConfigured ? null : loadLocal<Role | null>('odissea-role', null)
   ))
+  const [organizationId, setOrganizationId] = useState<string | null>(null)
   const [loading, setLoading] = useState(isSupabaseConfigured)
 
-  const loadRemoteRole = useCallback(async (): Promise<Role | null> => {
+  const loadRemoteAccess = useCallback(async (): Promise<Role | null> => {
     if (!supabase) return null
+    const { data: { user }, error: userError } = await supabase.auth.getUser()
+    if (userError || !user) return null
 
-    const { data, error } = await supabase.rpc('current_organization_role', {
-      target_organization_id: ODISSEA_ORGANIZATION_ID,
-    })
+    const { data, error } = await supabase
+      .from('organization_members')
+      .select('organization_id,roles(code)')
+      .eq('user_id', user.id)
+      .eq('status', 'active')
+      .order('created_at', { ascending: true })
+      .limit(1)
+      .single()
     if (error) throw error
-    if (typeof data !== 'string') return null
-    return remoteRoleAliases[data] ?? (validRoles.includes(data as Role) ? data as Role : null)
+
+    setOrganizationId(String(data.organization_id))
+    const roleRow = data.roles as unknown as { code?: string } | null
+    const remoteCode = String(roleRow?.code ?? '')
+    return remoteRoleAliases[remoteCode] ?? (validRoles.includes(remoteCode as Role) ? remoteCode as Role : null)
   }, [])
 
   useEffect(() => {
@@ -54,10 +66,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const refreshSession = async () => {
       try {
         const { data: { session } } = await client.auth.getSession()
-        const nextRole = session ? await loadRemoteRole() : null
-        if (active) setRole(nextRole)
+        const nextRole = session ? await loadRemoteAccess() : null
+        if (active) {
+          setRole(nextRole)
+          if (!nextRole) setOrganizationId(null)
+        }
       } catch {
-        if (active) setRole(null)
+        if (active) {
+          setRole(null)
+          setOrganizationId(null)
+        }
       } finally {
         if (active) setLoading(false)
       }
@@ -67,6 +85,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const { data: { subscription } } = client.auth.onAuthStateChange((_event, session) => {
       if (!session) {
         setRole(null)
+        setOrganizationId(null)
+        clearTenantCache()
         setLoading(false)
         return
       }
@@ -78,7 +98,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       active = false
       subscription.unsubscribe()
     }
-  }, [loadRemoteRole])
+  }, [loadRemoteAccess])
 
   const login = useCallback(async ({ email, password, demoRole }: LoginCredentials) => {
     if (!supabase) {
@@ -91,7 +111,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       const { error } = await supabase.auth.signInWithPassword({ email, password })
       if (error) throw error
-      const nextRole = await loadRemoteRole()
+      const nextRole = await loadRemoteAccess()
       if (!nextRole) {
         await supabase.auth.signOut()
         throw new Error('Tu cuenta todavía no tiene acceso asignado a ODISSEA HUB.')
@@ -101,24 +121,26 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } finally {
       setLoading(false)
     }
-  }, [loadRemoteRole])
+  }, [loadRemoteAccess])
 
   const logout = useCallback(async () => {
     if (supabase) {
       await supabase.auth.signOut()
     } else {
-      setRole(null)
       localStorage.removeItem('odissea-role')
     }
+    clearTenantCache()
     setRole(null)
+    setOrganizationId(null)
   }, [])
 
   const value = useMemo<AuthState>(() => ({
     role,
+    organizationId,
     loading,
     login,
     logout,
-  }), [loading, login, logout, role])
+  }), [loading, login, logout, organizationId, role])
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }

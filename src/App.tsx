@@ -50,7 +50,11 @@ export default function App() {
               <Route path="/admin/programas/:id" element={<ModulePage kind="programas" />} />
               <Route path="/admin/proyectos" element={<ProjectsPage />} />
               <Route path="/admin/proyectos/:id" element={<ProjectDetailPage />} />
-              {['convocatorias', 'candidaturas', 'evaluaciones', 'cohortes', 'mentores', 'itinerarios', 'eventos', 'indicadores', 'documentos', 'informes', 'usuarios', 'configuracion', 'auditoria'].map((path) => <Route key={path} path={`/admin/${path}`} element={<ModulePage kind={path} />} />)}
+              {['convocatorias', 'candidaturas', 'evaluaciones', 'cohortes', 'mentores', 'itinerarios', 'eventos', 'indicadores', 'documentos', 'informes'].map((path) => <Route key={path} path={`/admin/${path}`} element={<ModulePage kind={path} />} />)}
+            </Route>
+
+            <Route element={protectedLayout(['admin'])}>
+              {['usuarios', 'configuracion', 'auditoria'].map((path) => <Route key={path} path={`/admin/${path}`} element={<ModulePage kind={path} />} />)}
             </Route>
 
             <Route element={protectedLayout(['participant'])}>

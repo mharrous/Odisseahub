@@ -8,13 +8,16 @@
 - Navegación pública y privada por roles demo.
 - Dashboard de administración con métricas, alertas y gráficos.
 - Gestión persistente de programas con ciclo de vida completo y fallback demo.
-- Candidatura pública con borrador, adjunto, envío y resguardo.
+- Candidatura pública real con Auth anónimo, borrador PostgreSQL, adjunto privado, presentación bloqueada y resguardo con registro correlativo.
 - Listado filtrable de proyectos y ficha 360º con nueve pestañas operativas y CRUD persistente.
 - Buscador global, ayuda, notificaciones y accesos directos funcionales.
-- CRUD persistente para módulos operativos mediante `workspace_items` con RLS.
+- Repositorios reales para programas, proyectos, perfil, notificaciones, dashboard y entidades oficiales de dominio.
+- Módulos sin formulario especializado en modo consulta oficial, sin CRUD genérico engañoso mediante `workspace_items`.
 - Auditoría funcional autenticada y pruebas E2E ampliadas en escritorio y móvil.
 - Vistas iniciales de participante, mentor y evaluador.
-- Migración inicial multi-organización con RLS y auditoría.
+- Migración inicial multi-organización y endurecimiento RLS por permiso, autor, organización, proyecto y asignación.
+- Auditoría automática de programas, convocatorias, candidaturas, proyectos, documentos, eventos, indicadores y registros flexibles.
+- Adjuntos de candidaturas presentadas inmutables; lectura privada para titular, revisores y evaluadores asignados.
 - Seed de demostración no personal.
 - Proyecto Supabase de producción creado y migraciones/seed aplicados.
 - Autenticación real con sesión persistente, cierre de sesión, roles y recuperación de contraseña.
@@ -22,6 +25,8 @@
 - Buckets privados y trigger automático de perfiles.
 - Data API pública limitada por RLS: solo convocatorias publicadas; programas y proyectos privados no se exponen.
 - URL de producción y redirecciones de Auth configuradas.
+- Auth anónimo habilitado y flujo remoto completo verificado con el registro `ODI-2026-000001`.
+- CI de GitHub para lint, TypeScript, unitarias, E2E y build.
 
 ## En curso
 
@@ -35,7 +40,7 @@
 - Edge Functions de informes, correo y enlaces firmados.
 - Realtime selectivo.
 - Copiloto ODISSEA (desactivado).
-- Pruebas E2E autenticadas con cuentas reales de cada rol.
+- Pruebas E2E autenticadas con cuentas reales de mentor, evaluador y participante.
 
 ## Bloqueos
 

@@ -30,7 +30,7 @@ test('candidatura: borrador, documento, presentación y resguardo', async ({ pag
   await page.getByRole('button', { name: 'Guardar borrador' }).click()
   await expect(page.getByText('Borrador guardado')).toBeVisible()
   await page.getByRole('button', { name: 'Presentar candidatura' }).click()
-  await expect(page.getByRole('heading', { name: 'Tu proyecto ya está en ruta' })).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Tu proyecto ya está registrado' })).toBeVisible()
   await expect(page.getByRole('button', { name: 'Descargar resguardo' })).toBeVisible()
 })
 

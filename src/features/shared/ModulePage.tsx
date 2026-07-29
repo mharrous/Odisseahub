@@ -5,6 +5,8 @@ import { Button } from '../../components/ui/Button'
 import { EmptyState } from '../../components/ui/EmptyState'
 import { Modal } from '../../components/ui/Modal'
 import { listWorkspaceItems, removeWorkspaceItem, saveWorkspaceItem } from '../../lib/repository'
+import { domainBackedKinds, listDomainItems } from '../../lib/domainRepository'
+import { isSupabaseConfigured } from '../../lib/supabase'
 import type { WorkspaceItem } from '../../types/domain'
 
 const moduleConfig: Record<string, { title: string; description: string; item: string; samples?: string[]; readonly?: boolean }> = {
@@ -46,6 +48,8 @@ function fallbackItems(kind: string): WorkspaceItem[] {
 
 export function ModulePage({ kind }: { kind: string }) {
   const item = moduleConfig[kind] ?? { title: 'Módulo', description: 'Área funcional de ODISSEA HUB.', item: 'registro' }
+  const domainBacked = isSupabaseConfigured && domainBackedKinds.has(kind)
+  const readOnly = Boolean(item.readonly || domainBacked)
   const [rows, setRows] = useState<WorkspaceItem[]>([])
   const [query, setQuery] = useState('')
   const [status, setStatus] = useState('Todos')
@@ -58,7 +62,8 @@ export function ModulePage({ kind }: { kind: string }) {
 
   useEffect(() => {
     let active = true
-    listWorkspaceItems(kind, undefined, fallbackItems(kind))
+    const request = domainBacked ? listDomainItems(kind) : listWorkspaceItems(kind, undefined, fallbackItems(kind))
+    request
       .then((data) => {
         if (!active) return
         setRows(data)
@@ -66,7 +71,7 @@ export function ModulePage({ kind }: { kind: string }) {
       .catch((loadError) => active && setError(loadError instanceof Error ? loadError.message : 'No se han podido cargar los datos.'))
       .finally(() => active && setLoading(false))
     return () => { active = false }
-  }, [kind])
+  }, [domainBacked, kind])
 
   const filtered = useMemo(() => rows.filter((row) => {
     const matchesText = `${row.title} ${row.description} ${row.owner}`.toLowerCase().includes(query.toLowerCase())
@@ -126,7 +131,7 @@ export function ModulePage({ kind }: { kind: string }) {
       <PageHeader
         title={item.title}
         description={item.description}
-        action={!item.readonly && <Button onClick={() => setCreating(true)} icon={<Plus size={17} />}>Nuevo {item.item}</Button>}
+        action={!readOnly && <Button onClick={() => setCreating(true)} icon={<Plus size={17} />}>Nuevo {item.item}</Button>}
       />
       {error && <div className="notice notice--danger" role="alert">{error}</div>}
       <div className="table-card">
@@ -143,14 +148,14 @@ export function ModulePage({ kind }: { kind: string }) {
           <div className="empty-state"><p>Cargando datos…</p></div>
         ) : filtered.length ? (
           <table>
-            <thead><tr><th>Nombre</th><th>Estado</th><th>Actualización</th><th>Responsable</th>{!item.readonly && <th><span className="sr-only">Acciones</span></th>}</tr></thead>
+            <thead><tr><th>Nombre</th><th>Estado</th><th>Actualización</th><th>Responsable</th>{!readOnly && <th><span className="sr-only">Acciones</span></th>}</tr></thead>
             <tbody>{filtered.map((row) => (
               <tr key={row.id}>
                 <td><div className="table-title">{row.title}</div><div className="table-subtitle">{row.description || 'Sin descripción'}</div></td>
                 <td data-label="Estado"><span className={`badge badge--${row.status === 'En curso' ? 'warning' : row.status === 'Archivado' ? 'neutral' : 'success'}`}>{row.status}</span></td>
                 <td data-label="Actualización"><CalendarDays size={14} style={{ verticalAlign: 'middle', marginRight: 6 }} />{new Date(row.updatedAt).toLocaleDateString('es-ES')}</td>
                 <td data-label="Responsable">{row.owner}</td>
-                {!item.readonly && (
+                {!readOnly && (
                   <td data-label="Acciones"><div className="row-actions">
                     <Button size="sm" variant="ghost" onClick={() => setEditing(row)} icon={<Pencil size={14} />}>Editar</Button>
                     <Button size="sm" variant="danger" onClick={() => setDeleting(row)} icon={<Trash2 size={14} />}>Eliminar</Button>
@@ -160,10 +165,10 @@ export function ModulePage({ kind }: { kind: string }) {
             ))}</tbody>
           </table>
         ) : (
-          <EmptyState title={`No hay ${item.title.toLowerCase()} con estos filtros`} description="Cambia la búsqueda o crea el primer registro." action={!item.readonly && <Button onClick={() => setCreating(true)} icon={<FileText size={16} />}>Crear ahora</Button>} />
+          <EmptyState title={`No hay ${item.title.toLowerCase()} con estos filtros`} description={readOnly ? 'No existen registros visibles para tu rol.' : 'Cambia la búsqueda o crea el primer registro.'} action={!readOnly && <Button onClick={() => setCreating(true)} icon={<FileText size={16} />}>Crear ahora</Button>} />
         )}
       </div>
-      <div className="notice" style={{ marginTop: 18 }}><CheckCircle2 size={15} style={{ verticalAlign: 'middle', marginRight: 7 }} />Los cambios se guardan de forma persistente y respetan los permisos de tu organización.</div>
+      <div className="notice" style={{ marginTop: 18 }}><CheckCircle2 size={15} style={{ verticalAlign: 'middle', marginRight: 7 }} />{domainBacked ? 'Datos obtenidos de las tablas oficiales de Supabase según tus permisos.' : 'Los cambios se guardan de forma persistente y respetan los permisos de tu organización.'}</div>
 
       <Modal title={editing ? `Editar ${item.item}` : `Nuevo ${item.item}`} open={creating || Boolean(editing)} onClose={closeEditor}>
         <form onSubmit={submit}>

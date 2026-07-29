@@ -37,11 +37,13 @@ Pendiente antes de producción: ejecutar un análisis completo con axe y revisi�
 - No hay secretos en el frontend ni en `.env.example`.
 - RLS habilitada por migración en todas las tablas públicas.
 - Acceso a proyectos limitado por permiso, membresía o asignación.
+- `workspace_items` impide cambiar autor, organización, proyecto o tipo durante una actualización.
 - Evaluaciones cerradas no pueden modificarse por el evaluador.
 - Auditoría sin políticas de modificación o borrado.
-- Archivos privados representados por rutas internas, nunca URL pública directa.
+- Archivos de candidatura en bucket privado: el titular solo puede borrar mientras la solicitud sea borrador; revisores y evaluadores asignados disponen de lectura controlada.
+- CSP, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy` y protección de framing configuradas en `public/_headers`.
 - La fuente abierta Manrope se sirve desde el propio bundle; la interfaz no solicita fuentes a terceros.
 
 `npm audit --omit=dev` sigue señalando dos avisos altos del paquete React Router 7.18.1 vinculados al modo RSC/Server Actions. ODISSEA HUB utiliza exclusivamente `BrowserRouter` como SPA estática y no expone RSC, SSR ni Action handlers, por lo que esas rutas vulnerables no forman parte de la superficie actual. Se debe actualizar el paquete cuando exista una versión estable que resuelva el aviso. El audit completo también señala cinco rutas de desarrollo en ESLint/`brace-expansion`; no se empaquetan en producción.
 
-Las migraciones, el seed y las correcciones de Auth/Storage/Data API están aplicadas en el proyecto remoto. La auditoría del 29 de julio añadió `workspace_items`, verificó 20 tipos de registros activos y cubrió programas, módulos, buscador, ayuda y ficha 360º. Una prueba anónima confirmó una convocatoria publicada visible y cero programas o proyectos privados visibles. Sigue pendiente automatizar el acceso autenticado con cuentas reales de cada rol.
+Las migraciones, el seed y las correcciones de Auth/Storage/Data API están aplicadas en el proyecto remoto. El 29 de julio se verificaron las tres columnas nuevas de `applications`, 12 políticas relevantes y 10 disparadores de bloqueo, alcance y auditoría. Una candidatura anónima real guardó borrador y PDF, fue presentada como `ODI-2026-000001` y produjo tres eventos de auditoría. La base confirmó estado `submitted`, un archivo privado y fecha de presentación. Sigue pendiente automatizar el acceso autenticado con cuentas reales de mentor, evaluador y participante.

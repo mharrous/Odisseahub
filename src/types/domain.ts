@@ -49,3 +49,50 @@ export interface ApplicationDraft {
   registration?: string
   submittedAt?: string
 }
+
+export interface PublicCall {
+  id: string
+  organizationId: string
+  slug: string
+  name: string
+  description: string
+  opensAt?: string
+  closesAt?: string
+  places: number
+  status: 'published' | 'active'
+  privacyText: string
+  contactEmail: string
+}
+
+export interface SubmittedApplication {
+  id: string
+  registration: string
+  projectName: string
+  contactName: string
+  submittedAt: string
+}
+
+export interface UserProfile {
+  id: string
+  displayName: string
+  email: string
+}
+
+export interface AppNotification {
+  id: string
+  title: string
+  body: string
+  actionUrl?: string
+  readAt?: string
+  createdAt: string
+}
+
+export interface DashboardSummary {
+  activeProjects: number
+  averageProgress: number
+  mentorHours: number
+  pendingDeliverables: number
+  atRiskProjects: Array<{ id: string; name: string; progress: number }>
+  upcomingEvents: Array<{ id: string; title: string; startsAt: string; location: string }>
+  recentActivity: Array<{ id: string; title: string; detail: string; createdAt: string }>
+}
