@@ -69,10 +69,51 @@ test('administración: buscador, ayuda, módulo editable y ficha 360', async ({ 
   await page.goto('/admin/proyectos/p1')
   await page.getByRole('tab', { name: 'Entregables' }).click()
   await expect(page.getByText('Próximo entregable del proyecto')).toBeVisible()
-  await page.getByRole('button', { name: 'Añadir' }).click()
-  await page.getByLabel('Nombre *').fill('Entregable ficha E2E')
+  await page.getByRole('button', { name: 'Añadir entregable' }).click()
+  await page.getByLabel('Nombre del entregable *').fill('Entregable ficha E2E')
+  await page.getByLabel('Fecha límite *').fill('2027-06-30')
   await page.getByRole('button', { name: 'Guardar' }).click()
   await expect(page.getByText('Entregable ficha E2E')).toBeVisible()
+})
+
+test('administración: cada sección del proyecto tiene su formulario y lógica específica', async ({ page }) => {
+  await page.goto('/login')
+  await page.getByRole('button', { name: 'Administración' }).click()
+  await page.getByRole('button', { name: /entrar en mentoría/i }).click()
+  await page.goto('/admin/proyectos/p1')
+
+  const sections = [
+    { tab: 'Equipo', action: 'Añadir miembro', field: 'Correo electrónico *' },
+    { tab: 'Itinerario', action: 'Añadir hito', field: 'Progreso (%)' },
+    { tab: 'Entregables', action: 'Añadir entregable', field: 'Enlace a la evidencia' },
+    { tab: 'Mentorías', action: 'Programar mentoría', field: 'Duración (minutos) *' },
+    { tab: 'Sesiones', action: 'Programar sesión', field: 'Enlace de reunión' },
+    { tab: 'Indicadores', action: 'Añadir indicador', field: 'Valor actual *' },
+    { tab: 'Documentos', action: 'Añadir documento', field: 'Enlace al archivo *' },
+    { tab: 'Actividad', action: 'Registrar actividad', field: 'Tipo' },
+    { tab: 'Observaciones', action: 'Añadir observación', field: 'Visibilidad' },
+  ]
+
+  for (const section of sections) {
+    await page.getByRole('tab', { name: section.tab }).click()
+    await page.getByRole('button', { name: section.action }).click()
+    await expect(page.getByRole('heading', { name: section.action })).toBeVisible()
+    await expect(page.getByLabel(section.field)).toBeVisible()
+    await page.getByRole('button', { name: 'Cancelar', exact: true }).click()
+  }
+
+  await page.getByRole('tab', { name: 'Mentorías' }).click()
+  await page.getByRole('button', { name: 'Programar mentoría' }).click()
+  await page.getByLabel('Tema de la mentoría *').fill('Validación comercial')
+  await page.getByLabel('Mentor *').fill('Mentora E2E')
+  await page.getByLabel('Fecha *').fill('2027-05-20')
+  await page.getByLabel('Hora *').fill('10:30')
+  await page.getByLabel('Duración (minutos) *').fill('60')
+  await page.getByLabel('Modalidad').selectOption('Online')
+  await page.getByRole('button', { name: 'Guardar' }).click()
+  await expect(page.getByText('Validación comercial')).toBeVisible()
+  await expect(page.getByText('60 min')).toBeVisible()
+  await expect(page.getByText('Online')).toBeVisible()
 })
 
 test('administración: todos los módulos muestran acciones funcionales completas', async ({ page }) => {

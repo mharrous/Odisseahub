@@ -229,6 +229,7 @@ function mapWorkspaceItem(row: Record<string, unknown>): WorkspaceItem {
     dueDate: row.due_on ? String(row.due_on) : undefined,
     projectId: row.project_id ? String(row.project_id) : undefined,
     updatedAt: String(row.updated_at ?? new Date().toISOString()),
+    metadata: row.metadata && typeof row.metadata === 'object' ? row.metadata as Record<string, unknown> : {},
   }
 }
 
@@ -243,7 +244,7 @@ export async function listWorkspaceItems(kind: string, projectId?: string, defau
   const organizationId = await resolveOrganizationId()
   let query = assertSupabase()
     .from('workspace_items')
-    .select('id,kind,title,description,status,owner_name,due_on,project_id,updated_at')
+    .select('id,kind,title,description,status,owner_name,due_on,project_id,updated_at,metadata')
     .eq('organization_id', organizationId)
     .eq('kind', kind)
     .is('deleted_at', null)
@@ -275,11 +276,12 @@ export async function saveWorkspaceItem(item: Omit<WorkspaceItem, 'id' | 'update
     owner_name: item.owner,
     due_on: item.dueDate || null,
     project_id: item.projectId || null,
+    metadata: item.metadata ?? {},
   }
   const request = item.id
     ? client.from('workspace_items').update(payload).eq('id', item.id)
     : client.from('workspace_items').insert({ ...payload, created_by: user.id })
-  const { data, error } = await request.select('id,kind,title,description,status,owner_name,due_on,project_id,updated_at').single()
+  const { data, error } = await request.select('id,kind,title,description,status,owner_name,due_on,project_id,updated_at,metadata').single()
   if (error) throw error
   return mapWorkspaceItem(data as Record<string, unknown>)
 }

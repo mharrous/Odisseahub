@@ -60,6 +60,12 @@
 .project-item { display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 15px; border: 1px solid var(--line); border-radius: 12px; }
 .project-item p { margin: 4px 0; color: var(--muted); font-size: .78rem; }
 .project-item small { color: var(--muted); }
+.project-item__content { min-width: 0; }
+.project-item__details { display: flex; flex-wrap: wrap; gap: 6px 16px; margin: 10px 0 0; }
+.project-item__details div { display: flex; align-items: baseline; gap: 5px; font-size: .72rem; }
+.project-item__details dt { color: var(--muted); font-weight: 700; }
+.project-item__details dd { margin: 0; color: var(--text); font-weight: 800; }
+.project-item__details a { color: var(--primary); }
 .project-item__actions { display: flex; align-items: center; gap: 7px; }
 .milestone--button { width: 100%; color: var(--text); background: white; cursor: pointer; text-align: left; }
 .milestone--button:hover { border-color: var(--blue-600); background: var(--surface-blue); }
