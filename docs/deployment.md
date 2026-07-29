@@ -26,4 +26,4 @@ También se admite despliegue directo:
 npx wrangler pages deploy .\dist --project-name=mentoria
 ```
 
-Tras publicar, verifica `https://mentoria.pages.dev`, el inicio de sesión y al menos una acción administrativa real.
+Tras publicar, verifica `https://mentoria-bsv.pages.dev`, el inicio de sesión y al menos una acción administrativa real.

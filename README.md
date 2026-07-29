@@ -2,7 +2,7 @@
 
 Aplicación web para gestionar programas de incubación y aceleración: convocatorias, candidaturas, proyectos, itinerarios, mentorías, entregables, indicadores, documentos e informes.
 
-Aplicación publicada: [https://mentoria.pages.dev](https://mentoria.pages.dev)
+Aplicación publicada: [https://mentoria-bsv.pages.dev](https://mentoria-bsv.pages.dev)
 
 ## Estado
 

@@ -2,6 +2,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
 const allowedOrigins = new Set([
   'https://mentoria.pages.dev',
+  'https://mentoria-bsv.pages.dev',
   'http://127.0.0.1:4173',
   'http://localhost:4173',
 ])
@@ -9,7 +10,7 @@ const allowedOrigins = new Set([
 function corsHeaders(request: Request) {
   const origin = request.headers.get('origin') ?? ''
   return {
-    'Access-Control-Allow-Origin': allowedOrigins.has(origin) ? origin : 'https://mentoria.pages.dev',
+    'Access-Control-Allow-Origin': allowedOrigins.has(origin) ? origin : 'https://mentoria-bsv.pages.dev',
     'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
     'Vary': 'Origin',
@@ -74,7 +75,7 @@ Deno.serve(async (request) => {
 
   if (!user) {
     const origin = request.headers.get('origin')
-    const redirectTo = allowedOrigins.has(origin ?? '') ? `${origin}/restablecer-contrasena` : 'https://mentoria.pages.dev/restablecer-contrasena'
+    const redirectTo = allowedOrigins.has(origin ?? '') ? `${origin}/restablecer-contrasena` : 'https://mentoria-bsv.pages.dev/restablecer-contrasena'
     const { data, error } = await admin.auth.admin.inviteUserByEmail(email, {
       data: { display_name: body?.displayName?.trim() || email.split('@')[0] },
       redirectTo,

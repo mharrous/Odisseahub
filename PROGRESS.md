@@ -3,7 +3,7 @@
 ## Completado
 
 - Arquitectura React + TypeScript + Vite y configuración Cloudflare Pages.
-- Despliegue de producción en `https://mentoria.pages.dev`.
+- Despliegue de producción en `https://mentoria-bsv.pages.dev`.
 - Identidad completa renombrada a Mentoría en frontend, Supabase, autenticación y rutas públicas.
 - Sistema de diseño responsive, accesible y con tokens centralizados.
 - Navegación pública y privada por roles demo.
